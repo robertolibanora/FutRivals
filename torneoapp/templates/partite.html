@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Prossime Partite</h1>
+  {% if matches and matches|length > 0 %}
+    <div class="card next-match-card" style="background: var(--futrivals-green); color: var(--futrivals-black); margin-bottom: 1.5rem;">
+      <div class="teams" style="font-size:1.2rem; font-weight:bold;">{{ matches[0]['Squadra Casa'] }} vs {{ matches[0]['Squadra Trasferta'] }}</div>
+      <div class="date-time" style="font-size:1rem; margin:0.3rem 0;">{{ matches[0]['Data'] }} - {{ matches[0]['Ora'] }}</div>
+      <div class="stadium" style="font-size:0.95rem;">{{ matches[0]['Stadio'] }}</div>
+      {% if matches[0]['Tipo Partita'] %}
+        <div class="tipo-partita" style="font-size:0.95rem; font-weight:600; margin-top:0.2rem;">{{ matches[0]['Tipo Partita'] }}</div>
+      {% endif %}
+      {% if matches[0]['Risultato'] and matches[0]['Risultato'] != '-' %}
+        <div class="score" style="font-size:1.2rem; font-weight:bold; margin-top:0.5rem;">{{ matches[0]['Risultato'] }}</div>
+      {% endif %}
+    </div>
+    <h2 style="margin-top:1.5rem; color:var(--futrivals-green); font-size:1.1rem;">Calendario</h2>
+    <div style="display:flex; flex-direction:column; gap:1rem;">
+    {% for m in matches[1:] %}
+      <div class="card match-card" style="background: var(--futrivals-gray); color: var(--futrivals-white);">
+        <div class="teams" style="font-size:1.1rem; font-weight:bold;">{{ m['Squadra Casa'] }} vs {{ m['Squadra Trasferta'] }}</div>
+        <div class="date-time" style="font-size:0.98rem; margin:0.2rem 0;">{{ m['Data'] }} - {{ m['Ora'] }}</div>
+        <div class="stadium" style="font-size:0.92rem;">{{ m['Stadio'] }}</div>
+        {% if m['Tipo Partita'] %}
+          <div class="tipo-partita" style="font-size:0.92rem; font-weight:600; margin-top:0.1rem;">{{ m['Tipo Partita'] }}</div>
+        {% endif %}
+        {% if m['Risultato'] and m['Risultato'] != '-' %}
+          <div class="score" style="font-size:1.1rem; font-weight:bold; margin-top:0.3rem; color:var(--futrivals-gold);">{{ m['Risultato'] }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+    </div>
+  {% else %}
+    <p>Nessuna partita disponibile al momento.</p>
+  {% endif %}
+{% endblock %}
