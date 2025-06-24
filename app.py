@@ -3,51 +3,72 @@ from flask import Flask, render_template
 from datetime import datetime
 import os
 
+# Inizializza l'app Flask
 app = Flask(__name__)
 
+# Funzione per creare il file Excel con i fogli e colonne necessari se non esiste già
+# Questo permette all'app di funzionare anche al primo avvio senza dati reali
+# I dati di esempio sono utili per test e sviluppo
+
 def create_excel_if_not_exists():
+    """
+    Crea il file dati_torneo.xlsx con la struttura adatta al torneo a 10 squadre.
+    Ogni foglio ha le colonne richieste dal codice e i loghi sono personalizzabili tramite la colonna 'Logo'.
+    """
     excel_path = 'dati_torneo.xlsx'
     if not os.path.exists(excel_path):
-        # Foglio 1: Prossime Partite
+        # Lista delle 10 squadre e relativi loghi
+        squadre = [
+            ("Real Matadors", "realmatadors.png"),
+            ("I Gatti Rossi", "igattirossi.png"),
+            ("Team Rocket", "rocket.png"),
+            ("Blue Sharks", "bluesharks.png"),
+            ("Green Lions", "greenlions.png"),
+            ("Red Bulls", "redbulls.png"),
+            ("Black Panthers", "blackpanthers.png"),
+            ("White Eagles", "whiteeagles.png"),
+            ("Orange Foxes", "orangefoxes.png"),
+            ("Yellow Tigers", "yellowtigers.png")
+        ]
+        # Foglio 1: Prossime Partite (solo una partita di esempio per ogni squadra)
         df_prossime = pd.DataFrame([
-            {"Data": "2025-07-15", "Ora": "20:30", "Stadio": "Delta Volley Stadium", "Squadra Casa": "Team A", "Logo Casa": "teamA.png", "Squadra Trasferta": "Team B", "Logo Trasferta": "teamB.png"},
-            {"Data": "2025-07-16", "Ora": "21:00", "Stadio": "Delta Volley Stadium", "Squadra Casa": "Team C", "Logo Casa": "teamC.png", "Squadra Trasferta": "Team D", "Logo Trasferta": "teamD.png"}
+            {"Data": "2025-07-15", "Ora": "20:30", "Stadio": "Delta Stadium", "Squadra Casa": squadre[i%10][0], "Logo Casa": squadre[i%10][1], "Squadra Trasferta": squadre[(i+1)%10][0], "Logo Trasferta": squadre[(i+1)%10][1]} for i in range(10)
         ])
-        # Foglio 2: Rose
+        # Foglio 2: Rose (3 giocatori di esempio per squadra)
         df_rose = pd.DataFrame([
-            {"Squadra": "Team A", "Giocatore": "Mario Rossi", "Ruolo": "Attaccante", "Numero": 10},
-            {"Squadra": "Team A", "Giocatore": "Luigi Verdi", "Ruolo": "Centrocampista", "Numero": 8},
-            {"Squadra": "Team A", "Giocatore": "Paolo Bianchi", "Ruolo": "Difensore", "Numero": 4},
-            {"Squadra": "Team B", "Giocatore": "Carlo Neri", "Ruolo": "Attaccante", "Numero": 9},
-            {"Squadra": "Team B", "Giocatore": "Marco Gialli", "Ruolo": "Centrocampista", "Numero": 6},
-            {"Squadra": "Team B", "Giocatore": "Antonio Rossi", "Ruolo": "Difensore", "Numero": 3},
-            {"Squadra": "Team C", "Giocatore": "Giuseppe Verdi", "Ruolo": "Attaccante", "Numero": 11},
-            {"Squadra": "Team C", "Giocatore": "Roberto Bianchi", "Ruolo": "Centrocampista", "Numero": 7},
-            {"Squadra": "Team C", "Giocatore": "Francesco Neri", "Ruolo": "Difensore", "Numero": 2},
-            {"Squadra": "Team D", "Giocatore": "Alberto Rossi", "Ruolo": "Attaccante", "Numero": 10},
-            {"Squadra": "Team D", "Giocatore": "Marco Verdi", "Ruolo": "Centrocampista", "Numero": 8},
-            {"Squadra": "Team D", "Giocatore": "Paolo Gialli", "Ruolo": "Difensore", "Numero": 5}
+            {"Squadra": nome, "Giocatore": f"Giocatore {i+1}", "Ruolo": ruolo, "Numero": 10+i} 
+            for nome, _ in squadre for i, ruolo in enumerate(["Attaccante", "Centrocampista", "Difensore"])
         ])
-        # Foglio 3: Classifiche
+        # Foglio 3: Classifiche (gironi A e B, 5 squadre per girone, con colonna Logo)
+        gironi = ["Girone A"]*5 + ["Girone B"]*5
         df_classifiche = pd.DataFrame([
-            {"Pos": 1, "Squadra": "Team A", "Girone": "Girone A", "PG": 3, "V": 2, "N": 1, "P": 0, "GF": 7, "GS": 2, "PT": 7},
-            {"Pos": 2, "Squadra": "Team B", "Girone": "Girone A", "PG": 3, "V": 2, "N": 0, "P": 1, "GF": 5, "GS": 3, "PT": 6},
-            {"Pos": 1, "Squadra": "Team C", "Girone": "Girone B", "PG": 3, "V": 3, "N": 0, "P": 0, "GF": 8, "GS": 1, "PT": 9},
-            {"Pos": 2, "Squadra": "Team D", "Girone": "Girone B", "PG": 3, "V": 1, "N": 1, "P": 1, "GF": 4, "GS": 4, "PT": 4}
+            {"Pos": i+1, "Squadra": squadre[i][0], "Girone": gironi[i], "PG": 0, "V": 0, "N": 0, "P": 0, "GF": 0, "GS": 0, "PT": 0, "Logo": squadre[i][1]} for i in range(10)
         ])
-        # Foglio 4: Calendario Partite
-        df_calendario = pd.DataFrame([
-            {"Data": "2025-07-15", "Ora": "20:30", "Stadio": "Delta Volley Stadium", "Squadra Casa": "Team A", "Logo Casa": "teamA.png", "Squadra Trasferta": "Team B", "Logo Trasferta": "teamB.png", "Risultato": "3-1"},
-            {"Data": "2025-07-16", "Ora": "21:00", "Stadio": "Delta Volley Stadium", "Squadra Casa": "Team C", "Logo Casa": "teamC.png", "Squadra Trasferta": "Team D", "Logo Trasferta": "teamD.png", "Risultato": "2-2"},
-            {"Data": "2025-07-17", "Ora": "20:30", "Stadio": "Delta Volley Stadium", "Squadra Casa": "Team A", "Logo Casa": "teamA.png", "Squadra Trasferta": "Team C", "Logo Trasferta": "teamC.png", "Risultato": "-"},
-            {"Data": "2025-07-18", "Ora": "21:00", "Stadio": "Delta Volley Stadium", "Squadra Casa": "Team B", "Logo Casa": "teamB.png", "Squadra Trasferta": "Team D", "Logo Trasferta": "teamD.png", "Risultato": "-"}
-        ])
+        # Foglio 4: Calendario Partite (tutte le partite, esempio andata tra tutte le squadre)
+        calendario = []
+        for i in range(10):
+            for j in range(i+1, 10):
+                calendario.append({
+                    "Data": f"2025-07-{15 + (i+j)%10}",
+                    "Ora": "21:00",
+                    "Stadio": "Delta Stadium",
+                    "Squadra Casa": squadre[i][0],
+                    "Logo Casa": squadre[i][1],
+                    "Squadra Trasferta": squadre[j][0],
+                    "Logo Trasferta": squadre[j][1],
+                    "Risultato": "-"
+                })
+        df_calendario = pd.DataFrame(calendario)
+        # Scrittura su file Excel
         with pd.ExcelWriter(excel_path, engine='openpyxl') as writer:
             df_prossime.to_excel(writer, sheet_name='Prossime Partite', index=False)
             df_rose.to_excel(writer, sheet_name='Rose', index=False)
             df_classifiche.to_excel(writer, sheet_name='Classifiche', index=False)
             df_calendario.to_excel(writer, sheet_name='Calendario Partite', index=False)
-        print(f"Creato file Excel: {excel_path}")
+        print(f"Creato file Excel: {excel_path} (10 squadre, struttura aggiornata)")
+
+# Funzione per ottenere la prossima partita in programma
+# Restituisce un dizionario con tutte le info necessarie per il template
 
 def get_next_match():
     create_excel_if_not_exists()
@@ -72,23 +93,30 @@ def get_next_match():
         print(f"Errore nella lettura del file Excel: {e}")
     return None
 
+# Funzione per ottenere le rose delle squadre
+# Ora usa la colonna 'Logo' dal foglio Classifiche se presente, così puoi associare qualsiasi file logo a qualsiasi squadra
+
 def get_teams():
     create_excel_if_not_exists()
     try:
         df = pd.read_excel('dati_torneo.xlsx', sheet_name='Rose', engine='openpyxl')
+        # Carica anche la tabella Classifiche per i loghi personalizzati
+        df_logo = pd.read_excel('dati_torneo.xlsx', sheet_name='Classifiche', engine='openpyxl')
+        logo_dict = {row['Squadra']: row.get('Logo', '') for _, row in df_logo.iterrows()}
         teams = {}
         for squadra, players in df.groupby('Squadra'):
-            logo = squadra.lower().replace(' ', '') + '.png'
+            # Prende il logo dalla colonna Logo del foglio Classifiche, se presente
+            logo = logo_dict.get(squadra, squadra.lower().replace(' ', '') + '.png')
             teams[squadra] = {
                 'logo': logo,
                 'players': players.to_dict('records')
             }
-        print("DEBUG get_teams:", teams)  # DEBUG
         return teams
     except Exception as e:
         print(f"Errore nella lettura delle rose: {e}")
         return {}
 
+# Funzione per ottenere la classifica completa (tutti i gironi)
 def get_standings():
     create_excel_if_not_exists()
     try:
@@ -98,6 +126,7 @@ def get_standings():
         print(f"Errore nella lettura della classifica: {e}")
         return []
 
+# Funzione per ottenere tutte le partite del calendario (giocate e future)
 def get_matches():
     create_excel_if_not_exists()
     try:
@@ -121,34 +150,41 @@ def get_matches():
         print(f"Errore nella lettura del calendario: {e}")
         return []
 
+# ROUTES FLASK
+# Homepage: mostra la prossima partita
 @app.route('/')
 def index():
     next_match = get_next_match()
     return render_template('index.html', next_match=next_match)
 
+# Pagina rose: mostra le rose delle squadre
 @app.route('/rose')
 def rose():
     teams = get_teams()
-    print("DEBUG TEAMS:", teams)  # DEBUG
     return render_template('rose.html', teams=teams)
 
+# Pagina classifica: mostra la classifica per gironi
 @app.route('/classifica')
 def classifica():
     standings = get_standings()
     return render_template('classifica.html', standings=standings)
 
+# Pagina partite: mostra tutte le partite del calendario
 @app.route('/partite')
 def partite():
     matches = get_matches()
     return render_template('partite.html', matches=matches)
 
+# Pagina about: info torneo
 @app.route('/about')
 def about():
     return render_template('about.html')
 
+# Pagina menu mobile
 @app.route('/menu')
 def menu():
     return render_template('menu.html')
 
+# Avvio dell'app Flask in modalità debug (solo per sviluppo)
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=1234)
