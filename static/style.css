@@ -130,6 +130,12 @@ footer {
   background: none;
   text-shadow: 0 0 6px #00ff6a;
 }
+footer a {
+  pointer-events: none;
+  color: inherit;
+  text-decoration: none;
+  cursor: default;
+}
 
 /* Desktop styles */
 @media (min-width: 700px) {
