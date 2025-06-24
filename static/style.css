@@ -102,9 +102,12 @@ header.navbar {
 main {
   flex: 1;
   padding: 1.2rem 0.5rem 2.5rem 0.5rem;
-  max-width: 700px;
+  max-width: 420px;
   margin: 0 auto;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 footer {
   text-align: center;
@@ -248,237 +251,262 @@ th {
 
 /* Hero Section */
 .hero {
-    text-align: center;
-    padding: 2rem;
-    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('../images/field-bg.jpg');
-    background-size: cover;
-    color: white;
-    margin-bottom: 2rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
 .hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
 }
 
 /* Next Match Section */
 .next-match {
-    background:  #000000c6;
-    padding: 2rem;
-    border-radius: 10px;
-    max-width: 800px;
-    margin: 0 auto;
+  background: #181818;
+  border-radius: 18px;
+  box-shadow: 0 0 16px #00ff6a22;
+  padding: 1.5rem 1rem;
+  margin: 0 auto;
+  max-width: 340px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid #00ff6a55;
 }
-
+.next-match h2 {
+  color: #00ff6a;
+  margin-bottom: 1rem;
+  text-align: center;
+}
 .match-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
 }
-
-.team {
-    font-size: 1.5rem;
-    font-weight: bold;
-    flex: 1;
-    text-align: center;
+.team.home, .team.away {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  color: #fff;
+  margin-bottom: 0.2rem;
 }
-
+.logo img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: #222;
+  border: 2px solid #00ff6a;
+  box-shadow: 0 0 8px #00ff6a99;
+  margin: 0.2rem 0 0.2rem 0;
+  display: block;
+}
 .vs {
-    font-size: 1.2rem;
-    color: #ffd700;
+  font-size: 1.1rem;
+  color: #00ff6a;
+  font-weight: bold;
+  margin: 0.5rem 0;
+  text-shadow: 0 0 8px #00ff6a;
 }
-
 .match-details {
-    width: 100%;
-    text-align: center;
-    margin-top: 1rem;
+  text-align: center;
+  margin-top: 0.7rem;
+  color: #e0ffe0;
+  font-size: 1rem;
+}
+.match-details .date, .match-details .time, .match-details .stadium {
+  margin: 0.1rem 0;
 }
 
 /* Sponsors Section */
 .sponsors {
-    padding: 2rem 0.5rem;
-    background: #181818;
-    overflow: hidden;
-    border-radius: 12px;
-    margin-bottom: 2rem;
-    box-shadow: 0 0 16px #00ff6a22;
+  padding: 2rem 0.5rem;
+  background: #181818;
+  overflow: hidden;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 0 16px #00ff6a22;
+  width: 100%;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .sponsors h2 {
-    text-align: center;
-    margin-bottom: 2rem;
-    color: #00ff6a;
-    text-shadow: 0 0 8px #00ff6a, 0 0 2px #fff;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #00ff6a;
+  text-shadow: 0 0 8px #00ff6a, 0 0 2px #fff;
 }
 .sponsor-carousel {
-    width: 100%;
-    overflow: hidden;
-    position: relative;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
 }
 .sponsor-track {
-    display: flex;
-    animation: scroll 30s linear infinite;
-    width: max-content;
+  display: flex;
+  animation: scroll 30s linear infinite;
+  width: max-content;
 }
 .sponsor {
-    padding: 1rem;
-    margin: 0 2rem;
-    filter: drop-shadow(0 0 8px #00ff6a);
+  padding: 1rem;
+  margin: 0 2rem;
+  filter: drop-shadow(0 0 8px #00ff6a);
 }
 .sponsor img {
-    height: 80px;
-    width: auto;
-    object-fit: contain;
-    background: #101010;
-    border-radius: 8px;
-    box-shadow: 0 0 12px #00ff6a55;
-    padding: 0.5rem;
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+  background: #101010;
+  border-radius: 8px;
+  box-shadow: 0 0 12px #00ff6a55;
+  padding: 0.5rem;
 }
 @keyframes scroll {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-50%);
-    }
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .match-info {
-        flex-direction: column;
-    }
-    
-    .team {
-        font-size: 1.2rem;
-    }
-    
-    .sponsor img {
-        height: 60px;
-    }
+  .match-info {
+    flex-direction: column;
+  }
+  
+  .team {
+    font-size: 1.2rem;
+  }
+  
+  .sponsor img {
+    height: 60px;
+  }
 }
 
 /* Live Scores Page */
 .live-scores {
-    padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .live-scores h1 {
-    text-align: center;
-    margin-bottom: 2rem;
-    color: #333;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
 }
 
 .matches-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
 }
 
 .match-card {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    padding: 1.5rem;
-    transition: transform 0.2s;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  transition: transform 0.2s;
 }
 
 .match-card:hover {
-    transform: translateY(-5px);
+  transform: translateY(-5px);
 }
 
 .match-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
 }
 
 .match-time {
-    font-weight: bold;
-    color: #666;
+  font-weight: bold;
+  color: #666;
 }
 
 .match-status {
-    color: #e74c3c;
-    font-weight: bold;
+  color: #e74c3c;
+  font-weight: bold;
 }
 
 .teams {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem 0;
 }
 
 .team {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
 }
 
 .team img {
-    width: 60px;
-    height: 60px;
-    object-fit: contain;
-    margin-bottom: 0.5rem;
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
 }
 
 .team-name {
-    font-weight: bold;
-    margin: 0.5rem 0;
+  font-weight: bold;
+  margin: 0.5rem 0;
 }
 
 .score {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #2c3e50;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2c3e50;
 }
 
 .vs {
-    color: #95a5a6;
-    font-weight: bold;
-    margin: 0 1rem;
+  color: #95a5a6;
+  font-weight: bold;
+  margin: 0 1rem;
 }
 
 .match-footer {
-    text-align: center;
-    margin-top: 1rem;
-    padding-top: 0.5rem;
-    border-top: 1px solid #eee;
-    color: #7f8c8d;
+  text-align: center;
+  margin-top: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #eee;
+  color: #7f8c8d;
 }
 
 .no-matches {
-    text-align: center;
-    padding: 3rem;
-    background: #f8f9fa;
-    border-radius: 10px;
+  text-align: center;
+  padding: 3rem;
+  background: #f8f9fa;
+  border-radius: 10px;
 }
 
 .no-matches h2 {
-    color: #95a5a6;
+  color: #95a5a6;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .matches-container {
-        grid-template-columns: 1fr;
-    }
-    
-    .team img {
-        width: 50px;
-        height: 50px;
-    }
-    
-    .score {
-        font-size: 1.2rem;
-    }
+  .matches-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .team img {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .score {
+    font-size: 1.2rem;
+  }
 }
 
 /* Header con logo grande */
@@ -533,10 +561,10 @@ th {
 
 /* Titoli */
 h1, h2, h3 {
-  font-weight: bold;
   color: #00ff6a;
   text-shadow: 0 0 12px #00ff6a, 0 0 2px #fff;
   letter-spacing: 1px;
+  text-align: center;
 }
 
 .team-logo {
