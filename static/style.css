@@ -78,7 +78,7 @@ header.navbar {
   box-shadow: 0 2px 16px #00ff6a33;
   min-width: 160px;
   padding: 0.7rem 0;
-  z-index: 1002;
+  z-index: 2000;
 }
 .nav-links.open {
   display: flex;
@@ -106,7 +106,7 @@ header.navbar {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0,0,0,0.5);
-  z-index: 1000;
+  z-index: 1500;
 }
 #nav-overlay.open {
   display: block;

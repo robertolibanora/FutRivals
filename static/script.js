@@ -21,18 +21,26 @@ document.addEventListener('DOMContentLoaded', function() {
       e.stopPropagation();
       navLinks.classList.toggle('open');
       navOverlay.classList.toggle('open');
+      if(navLinks.classList.contains('open')) {
+        navLinks.style.display = 'flex';
+        navLinks.focus && navLinks.focus();
+      } else {
+        navLinks.style.display = '';
+      }
     });
     // Chiudi il menu quando clicchi su un link (mobile UX)
     navLinks.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         navLinks.classList.remove('open');
         navOverlay.classList.remove('open');
+        navLinks.style.display = '';
       });
     });
     // Chiudi il menu se clicchi sull'overlay
     navOverlay.addEventListener('click', function() {
       navLinks.classList.remove('open');
       navOverlay.classList.remove('open');
+      navLinks.style.display = '';
     });
   }
 });
