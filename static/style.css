@@ -620,3 +620,71 @@ h1, h2, h3 {
     display: none !important;
   }
 }
+
+/* Pulsante menu mobile */
+.menu-btn-mobile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #00ff6a;
+  color: #101010;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 0.5rem 1.2rem;
+  margin-left: auto;
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+  box-shadow: 0 0 8px #00ff6a;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+  z-index: 1002;
+}
+.menu-btn-mobile:hover {
+  background: #101010;
+  color: #00ff6a;
+  border: 2px solid #00ff6a;
+}
+
+.desktop-only {
+  display: none;
+}
+@media (min-width: 700px) {
+  .menu-btn-mobile {
+    display: none;
+  }
+  .desktop-only {
+    display: flex !important;
+  }
+}
+
+.menu-mobile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  margin-top: 2rem;
+}
+.menu-mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.menu-mobile-link {
+  font-size: 1.5rem;
+  color: #00ff6a;
+  background: #181818;
+  border-radius: 12px;
+  padding: 1rem 2.5rem;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 0 16px #00ff6a55;
+  text-align: center;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.menu-mobile-link:hover {
+  background: #00ff6a;
+  color: #181818;
+  box-shadow: 0 0 24px #00ff6a;
+}

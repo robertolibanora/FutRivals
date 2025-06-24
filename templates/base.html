@@ -12,10 +12,8 @@
       <img src="{{ url_for('static', filename='FutRivals.png') }}" alt="Fut Rivals Logo">
       <span class="tournament-title">TORNEO FUT RIVALS</span>
     </div>
-    <div class="menu-toggle" id="menu-toggle">
-      <div></div><div></div><div></div>
-    </div>
-    <nav class="nav-links" id="nav-links">
+    <a href="{{ url_for('menu') }}" class="menu-btn-mobile">Menu</a>
+    <nav class="nav-links desktop-only">
       <a class="nav-link" href="{{ url_for('index') }}">Homepage</a>
       <a class="nav-link" href="{{ url_for('rose') }}">Rose</a>
       <a class="nav-link" href="{{ url_for('classifica') }}">Classifica</a>

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+  <section class="menu-mobile">
+    <h1>Menu</h1>
+    <nav class="menu-mobile-nav">
+      <a class="menu-mobile-link" href="{{ url_for('index') }}">Homepage</a>
+      <a class="menu-mobile-link" href="{{ url_for('rose') }}">Rose</a>
+      <a class="menu-mobile-link" href="{{ url_for('classifica') }}">Classifica</a>
+      <a class="menu-mobile-link" href="{{ url_for('partite') }}">Partite</a>
+      <a class="menu-mobile-link" href="{{ url_for('about') }}">About</a>
+    </nav>
+  </section>
+{% endblock %} 
