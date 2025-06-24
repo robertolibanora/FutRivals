@@ -15,20 +15,24 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener('DOMContentLoaded', function() {
   const menuToggle = document.getElementById('menu-toggle');
   const navLinks = document.getElementById('nav-links');
-  if(menuToggle && navLinks) {
+  const navOverlay = document.getElementById('nav-overlay');
+  if(menuToggle && navLinks && navOverlay) {
     menuToggle.addEventListener('click', function(e) {
       e.stopPropagation();
       navLinks.classList.toggle('open');
+      navOverlay.classList.toggle('open');
     });
     // Chiudi il menu quando clicchi su un link (mobile UX)
     navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => navLinks.classList.remove('open'));
-    });
-    // Chiudi il menu se clicchi fuori
-    document.addEventListener('click', function(e) {
-      if(navLinks.classList.contains('open') && !navLinks.contains(e.target) && e.target !== menuToggle) {
+      link.addEventListener('click', () => {
         navLinks.classList.remove('open');
-      }
+        navOverlay.classList.remove('open');
+      });
+    });
+    // Chiudi il menu se clicchi sull'overlay
+    navOverlay.addEventListener('click', function() {
+      navLinks.classList.remove('open');
+      navOverlay.classList.remove('open');
     });
   }
 });
