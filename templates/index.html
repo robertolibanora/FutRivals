@@ -9,9 +9,9 @@
         <h2>Prossima Partita</h2>
         <div class="match-info team-logos-flex">
             <div class="team home">{{ next_match.squadra_casa }}</div>
-            <div class="team-logo-wrap"><img class="team-logo" src="{{ url_for('static', filename=next_match.logo_casa) }}" alt="{{ next_match.squadra_casa }}"></div>
+            <div class="logo"><img src="{{ url_for('static', filename='squadre/' + next_match.logo_casa) }}" alt="{{ next_match.squadra_casa }}"></div>
             <div class="vs">VS</div>
-            <div class="team-logo-wrap"><img class="team-logo" src="{{ url_for('static', filename=next_match.logo_trasferta) }}" alt="{{ next_match.squadra_trasferta }}"></div>
+            <div class="logo"><img src="{{ url_for('static', filename='squadre/' + next_match.logo_trasferta) }}" alt="{{ next_match.squadra_trasferta }}"></div>
             <div class="team away">{{ next_match.squadra_trasferta }}</div>
         </div>
         <div class="match-details">
