@@ -16,31 +16,28 @@ document.addEventListener('DOMContentLoaded', function() {
   const menuToggle = document.getElementById('menu-toggle');
   const navLinks = document.getElementById('nav-links');
   const navOverlay = document.getElementById('nav-overlay');
+
+  // Mobile hamburger menu
   if(menuToggle && navLinks && navOverlay) {
     menuToggle.addEventListener('click', function(e) {
       e.stopPropagation();
-      navLinks.classList.toggle('open');
-      navOverlay.classList.toggle('open');
-      if(navLinks.classList.contains('open')) {
-        navLinks.style.display = 'flex';
-        navLinks.focus && navLinks.focus();
-      } else {
-        navLinks.style.display = '';
-      }
+      const isOpen = navLinks.classList.toggle('open');
+      navOverlay.classList.toggle('open', isOpen);
     });
-    // Chiudi il menu quando clicchi su un link (mobile UX)
     navLinks.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         navLinks.classList.remove('open');
         navOverlay.classList.remove('open');
-        navLinks.style.display = '';
       });
     });
-    // Chiudi il menu se clicchi sull'overlay
     navOverlay.addEventListener('click', function() {
       navLinks.classList.remove('open');
       navOverlay.classList.remove('open');
-      navLinks.style.display = '';
     });
   }
+
+  // Aggiornamento automatico della pagina ogni 60 secondi
+  setTimeout(() => {
+    window.location.reload();
+  }, 60000);
 });
