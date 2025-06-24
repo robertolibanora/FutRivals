@@ -51,7 +51,7 @@ header.navbar {
   text-shadow: 0 0 8px #00ff6a, 0 0 2px #fff;
 }
 .menu-toggle {
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   justify-content: center;
   cursor: pointer;
