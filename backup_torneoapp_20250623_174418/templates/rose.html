@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Rose delle Squadre</h1>
+  <div id="squadre-list">
+    <label for="squadra-select">Seleziona una squadra:</label>
+    <select id="squadra-select">
+      <option value="" selected disabled>-- Scegli una squadra --</option>
+      {% for team, info in teams.items() %}
+        <option value="{{ team }}">{{ team }}</option>
+      {% endfor %}
+    </select>
+    <div id="logo-squadra" style="margin: 20px 0;"></div>
+  </div>
+  <div id="rosa-squadra"></div>
+  <script>
+    const teams = {{ teams|tojson }};
+    const select = document.getElementById('squadra-select');
+    const logoDiv = document.getElementById('logo-squadra');
+    const rosaDiv = document.getElementById('rosa-squadra');
+    select.addEventListener('change', function() {
+      const team = this.value;
+      if (team && teams[team]) {
+        logoDiv.innerHTML = `<img src='/static/${teams[team].logo}' alt='Logo ${team}' style='height:80px'>`;
+        // DEBUG: mostra la struttura dei dati
+        console.log(teams[team].players);
+        // Tabella con Numero, Giocatore, Ruolo, Gol
+        let html = `<h2>${team}</h2><table><thead><tr><th>#</th><th>Giocatore</th><th>Ruolo</th><th>Gol</th></tr></thead><tbody>`;
+        teams[team].players.forEach(p => {
+          html += `<tr><td>${p.Numero ?? p.numero ?? ''}</td><td>${p.Giocatore ?? p.giocatore ?? ''}</td><td>${p.Ruolo ?? p.ruolo ?? ''}</td><td>${p.Gol ?? p.gol ?? 0}</td></tr>`;
+        });
+        html += '</tbody></table>';
+        rosaDiv.innerHTML = html;
+      } else {
+        logoDiv.innerHTML = '';
+        rosaDiv.innerHTML = '';
+      }
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Partite</h1>
+  {% if matches %}
+    {% for m in matches %}
+      <div class="match">
+        <div class="teams">{{ m.SquadraA }} vs {{ m.SquadraB }}</div>
+        <div class="score">{{ m.GolA }} – {{ m.GolB }}</div>
+        <div style="width:100%; font-size:0.8rem; opacity:0.8">{{ m.Data }} {{ m.Ora }}</div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>Nessuna partita disponibile al momento.</p>
+  {% endif %}
+{% endblock %}
