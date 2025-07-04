@@ -3,13 +3,19 @@
   <h1>Classifica</h1>
   <div class="card">
     <h2>Girone A</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Pos</th><th>Squadra</th><th>PG</th><th>V</th><th>N</th><th>P</th><th>GF</th><th>GS</th><th>PT</th>
-        </tr>
-      </thead>
-      <tbody>
+  <table>
+    <thead>
+      <tr>
+        <th>Pos</th>
+        <th>Squadra</th>
+        <th>PG</th>
+        <th>V</th>
+        <th>N</th>
+        <th>P</th>
+        <th>PT</th>
+      </tr>
+    </thead>
+    <tbody>
         {% for row in standings if row.Girone == 'Girone A' %}
           <tr>
             <td>{{ row.Pos }}</td>
@@ -20,7 +26,7 @@
               {{ row.Squadra }}
             </td>
             <td>{{ row.PG }}</td><td>{{ row.V }}</td><td>{{ row.N }}</td><td>{{ row.P }}</td>
-            <td>{{ row.GF }}</td><td>{{ row.GS }}</td><td>{{ row.PT }}</td>
+            <td>{{ row.PT }}</td>
           </tr>
         {% endfor %}
       </tbody>
@@ -31,24 +37,30 @@
     <table>
       <thead>
         <tr>
-          <th>Pos</th><th>Squadra</th><th>PG</th><th>V</th><th>N</th><th>P</th><th>GF</th><th>GS</th><th>PT</th>
+          <th>Pos</th>
+          <th>Squadra</th>
+          <th>PG</th>
+          <th>V</th>
+          <th>N</th>
+          <th>P</th>
+          <th>PT</th>
         </tr>
       </thead>
       <tbody>
         {% for row in standings if row.Girone == 'Girone B' %}
-          <tr>
-            <td>{{ row.Pos }}</td>
+        <tr>
+          <td>{{ row.Pos }}</td>
             <td style="display:flex;align-items:center;gap:0.5rem;">
               {% if row['Logo Casa'] %}
                 <img src="{{ url_for('static', filename='squadre/' + row['Logo Casa']) }}" alt="Logo {{ row.Squadra }}" style="height:28px;width:28px;border-radius:50%;background:#222;border:2px solid #00ff6a;box-shadow:0 0 6px #00ff6a99;">
               {% endif %}
               {{ row.Squadra }}
             </td>
-            <td>{{ row.PG }}</td><td>{{ row.V }}</td><td>{{ row.N }}</td><td>{{ row.P }}</td>
-            <td>{{ row.GF }}</td><td>{{ row.GS }}</td><td>{{ row.PT }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+          <td>{{ row.PG }}</td><td>{{ row.V }}</td><td>{{ row.N }}</td><td>{{ row.P }}</td>
+          <td>{{ row.PT }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
   </div>
 {% endblock %}
