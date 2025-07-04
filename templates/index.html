@@ -6,17 +6,27 @@
     <div class="card">
     {% if next_match %}
         <h2>Prossima Partita</h2>
-        <div class="match-info team-logos-flex">
-            <div class="team home">{{ next_match.squadra_casa }}</div>
-            <div class="logo"><img src="{{ url_for('static', filename='squadre/' + next_match.logo_casa) }}" alt="{{ next_match.squadra_casa }}"></div>
-            <div class="vs">VS</div>
-            <div class="logo"><img src="{{ url_for('static', filename='squadre/' + next_match.logo_trasferta) }}" alt="{{ next_match.squadra_trasferta }}"></div>
-            <div class="team away">{{ next_match.squadra_trasferta }}</div>
+        <div class="match-info team-logos-flex" style="flex-direction:column;align-items:center;gap:1.2em;">
+            <div class="team home" style="font-size:1.25em;">{{ next_match.squadra_casa }}</div>
+            <div class="logo">
+                <img class="team-logo-big" src="{{ url_for('static', filename='squadre/' + next_match.logo_casa) }}" alt="{{ next_match.squadra_casa }}">
+            </div>
+            <div class="vs vs-neon">VS</div>
+            <div class="logo">
+                <img class="team-logo-big" src="{{ url_for('static', filename='squadre/' + next_match.logo_trasferta) }}" alt="{{ next_match.squadra_trasferta }}">
+            </div>
+            <div class="team away" style="font-size:1.25em;">{{ next_match.squadra_trasferta }}</div>
         </div>
         <div class="match-details">
-            <p class="date">{{ next_match.data }}</p>
-            <p class="time">{{ next_match.ora }}</p>
+            <p class="date">{{ next_match.data.split(' ')[0] }}</p>
+            <p class="time">{{ next_match.ora[:5] }}</p>
             <p class="stadium">{{ next_match.stadio }}</p>
+            {% if next_match.tipo_partita %}
+              <p class="tipo-partita">{{ next_match.tipo_partita }}</p>
+            {% endif %}
+            {% if next_match.risultato and next_match.risultato != '-' %}
+              <p class="score">{{ next_match.risultato }}</p>
+            {% endif %}
         </div>
     {% else %}
         <h2>Nessuna partita programmata</h2>
@@ -30,12 +40,9 @@
         <div class="sponsor-track">
             <!-- Sponsor attuali -->
             <div class="sponsor">
-                <a href="https://www.sartosrl.com" target="_blank" rel="noopener">
-                    <img src="{{ url_for('static', filename='sponsors/sponsor1.png') }}" alt="Sponsor Sarto SRL">
-                </a>
+                <img src="{{ url_for('static', filename='sponsors/sponsor1.png') }}" alt="Sponsor Sarto SRL">
             </div>
             <div class="sponsor">
-                <a href="https://www.milannoleggi.it" target="_blank" rel="noopener">
                 <img src="{{ url_for('static', filename='sponsors/sponsor2.png') }}" alt="Sponsor 2" style="background:#222;">
             </div>
             <div class="sponsor">
