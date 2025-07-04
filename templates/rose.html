@@ -12,15 +12,15 @@
     <div id="logo-squadra" style="margin: 20px 0; text-align:center;"></div>
   </div>
   <div id="rosa-squadra"></div>
-  <script>
-    const teams = {{ teams|tojson }};
+  <script type="text/javascript">
+    const teams = {{ teams|tojson|safe }};
     const select = document.getElementById('squadra-select');
     const logoDiv = document.getElementById('logo-squadra');
     const rosaDiv = document.getElementById('rosa-squadra');
     select.addEventListener('change', function() {
       const team = this.value;
       if (team && teams[team]) {
-        logoDiv.innerHTML = `<div style='display:flex;justify-content:center;'><img class='team-logo' src='/static/${teams[team].logo}' alt='Logo ${team}'></div>`;
+        logoDiv.innerHTML = `<div style='display:flex;justify-content:center;'><img class='team-logo-big' src='/static/squadre/${teams[team].logo}' alt='Logo ${team}'></div>`;
         // DEBUG: mostra la struttura dei dati
         console.log(teams[team].players);
         let html = `<div class='card'><h2>${team}</h2><table><thead><tr><th>#</th><th>Giocatore</th><th>Ruolo</th><th>Gol</th></tr></thead><tbody>`;
