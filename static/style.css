@@ -638,17 +638,17 @@ h1, h2, h3 {
   box-shadow: 0 0 32px #00ff6a, 0 0 8px #fff;
 }
 .team-logo-big {
-  width: 200px;
-  height: 200px;
-  max-width: 60vw;
-  max-height: 60vw;
+  width: 260px;
+  height: 260px;
+  max-width: 80vw;
+  max-height: 80vw;
 }
 @media (min-width: 600px) {
   .team-logo-big {
-    width: 260px;
-    height: 260px;
-    max-width: 260px;
-    max-height: 260px;
+    width: 340px;
+    height: 340px;
+    max-width: 340px;
+    max-height: 340px;
   }
 }
 
