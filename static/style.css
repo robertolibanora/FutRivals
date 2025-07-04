@@ -745,3 +745,35 @@ h1, h2, h3 {
   text-align: center;
   filter: brightness(1.2);
 }
+
+/* Card larghezza uniforme */
+.card, .match-card, .next-match-card {
+  width: 95vw;
+  max-width: 420px;
+  min-width: 220px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+@media (min-width: 600px) {
+  .card, .match-card, .next-match-card {
+    width: 420px;
+    max-width: 420px;
+    min-width: 420px;
+  }
+}
+/* Loghi rose più piccoli */
+#logo-squadra .team-logo-big {
+  width: 120px;
+  height: 120px;
+  max-width: 120px;
+  max-height: 120px;
+}
+@media (min-width: 600px) {
+  #logo-squadra .team-logo-big {
+    width: 160px;
+    height: 160px;
+    max-width: 160px;
+    max-height: 160px;
+  }
+}
