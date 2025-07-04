@@ -1,22 +1,24 @@
 # ISTRUZIONI PER GIT E DEPLOY FUTRIVALS
 
-Ogni volta che fai delle modifiche e vuoi fare commit + push, **ricordati di includere anche il file Excel dei dati**!
+Ogni volta che fai delle modifiche e vuoi fare commit + push, **ricordati di includere anche il file Excel dei dati e i loghi delle squadre**!
 
 Esegui SEMPRE questi comandi:
 
 1. git add .
-2. git add FUTRIVALSDATA.xlsx
-3. git commit -m "Messaggio descrittivo delle modifiche"
+2. git add FUTRIVALSDATA.xlsx DATITORNEO.xlsx
+3. git add static/squadre/*.png
+4. git commit -m "Messaggio descrittivo delle modifiche"
+5. git push
+
+Così il file Excel e i loghi saranno sempre aggiornati anche su Render e il sito userà i dati giusti!
+
+Se modifichi solo il file Excel o i loghi:
+
+1. git add FUTRIVALSDATA.xlsx DATITORNEO.xlsx
+2. git add static/squadre/*.png
+3. git commit -m "Aggiornamento dati torneo e loghi"
 4. git push
 
-Così il file Excel sarà sempre aggiornato anche su Render e il sito userà i dati giusti!
-
-Se modifichi solo il file Excel:
-
-1. git add FUTRIVALSDATA.xlsx
-2. git commit -m "Aggiornamento dati torneo"
-3. git push
-
 **IMPORTANTE:**
-- Controlla che il file non sia nel .gitignore!
+- Controlla che i file non siano nel .gitignore!
 - Dopo il push, Render aggiornerà automaticamente il sito. 
