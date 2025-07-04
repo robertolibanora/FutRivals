@@ -777,3 +777,34 @@ h1, h2, h3 {
     max-height: 160px;
   }
 }
+
+/* Tabella classifica mobile first */
+.classifica-table, .classifica-table-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  box-sizing: border-box;
+  padding: 0.5em 0.2em;
+}
+
+/* Loghi nelle card partite più piccoli e contenuti */
+.match-card .team-logo-big {
+  width: 80px;
+  height: 80px;
+  max-width: 80px;
+  max-height: 80px;
+}
+@media (min-width: 600px) {
+  .match-card .team-logo-big {
+    width: 120px;
+    height: 120px;
+    max-width: 120px;
+    max-height: 120px;
+  }
+}
+
+/* Fix padding card per evitare overflow */
+.card, .match-card, .next-match-card {
+  padding-left: 0.7em;
+  padding-right: 0.7em;
+}
