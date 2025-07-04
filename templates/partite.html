@@ -2,8 +2,18 @@
 {% block content %}
   <h1>Prossime Partite</h1>
   {% if matches and matches|length > 0 %}
-    <div class="card next-match-card" style="background: var(--futrivals-green); color: var(--futrivals-black); margin-bottom: 1.5rem;">
-      <div class="teams" style="font-size:1.2rem; font-weight:bold;">{{ matches[0]['Squadra Casa'] }} vs {{ matches[0]['Squadra Trasferta'] }}</div>
+    <div class="card match-card" style="background: var(--futrivals-green); color: var(--futrivals-black); margin-bottom: 1.5rem; display:flex; flex-direction:column; align-items:center; gap:0.7em;">
+      <div class="teams" style="display:flex;align-items:center;justify-content:center;gap:1.2em;">
+        <div style="text-align:center;">
+          <img class="team-logo-big" src="{{ url_for('static', filename='squadre/' + matches[0]['Logo Casa']) }}" alt="{{ matches[0]['Squadra Casa'] }}" style="margin-bottom:0.2em;">
+          <div style="font-weight:bold;font-size:1.1em;">{{ matches[0]['Squadra Casa'] }}</div>
+        </div>
+        <div class="vs vs-neon" style="align-self:center;">VS</div>
+        <div style="text-align:center;">
+          <img class="team-logo-big" src="{{ url_for('static', filename='squadre/' + matches[0]['Logo Trasferta']) }}" alt="{{ matches[0]['Squadra Trasferta'] }}" style="margin-bottom:0.2em;">
+          <div style="font-weight:bold;font-size:1.1em;">{{ matches[0]['Squadra Trasferta'] }}</div>
+        </div>
+      </div>
       <div class="date-time" style="font-size:1rem; margin:0.3rem 0;">{{ matches[0]['Data'] }} - {{ matches[0]['Ora'] }}</div>
       <div class="stadium" style="font-size:0.95rem;">{{ matches[0]['Stadio'] }}</div>
       {% if matches[0]['Tipo Partita'] %}
@@ -16,8 +26,18 @@
     <h2 style="margin-top:1.5rem; color:var(--futrivals-green); font-size:1.1rem;">Calendario</h2>
     <div style="display:flex; flex-direction:column; gap:1rem;">
     {% for m in matches[1:] %}
-      <div class="card match-card" style="background: var(--futrivals-gray); color: var(--futrivals-white);">
-        <div class="teams" style="font-size:1.1rem; font-weight:bold;">{{ m['Squadra Casa'] }} vs {{ m['Squadra Trasferta'] }}</div>
+      <div class="card match-card" style="background: var(--futrivals-gray); color: var(--futrivals-white); display:flex; flex-direction:column; align-items:center; gap:0.7em;">
+        <div class="teams" style="display:flex;align-items:center;justify-content:center;gap:1.2em;">
+          <div style="text-align:center;">
+            <img class="team-logo-big" src="{{ url_for('static', filename='squadre/' + m['Logo Casa']) }}" alt="{{ m['Squadra Casa'] }}" style="margin-bottom:0.2em;">
+            <div style="font-weight:bold;font-size:1.1em;">{{ m['Squadra Casa'] }}</div>
+          </div>
+          <div class="vs vs-neon" style="align-self:center;">VS</div>
+          <div style="text-align:center;">
+            <img class="team-logo-big" src="{{ url_for('static', filename='squadre/' + m['Logo Trasferta']) }}" alt="{{ m['Squadra Trasferta'] }}" style="margin-bottom:0.2em;">
+            <div style="font-weight:bold;font-size:1.1em;">{{ m['Squadra Trasferta'] }}</div>
+          </div>
+        </div>
         <div class="date-time" style="font-size:0.98rem; margin:0.2rem 0;">{{ m['Data'] }} - {{ m['Ora'] }}</div>
         <div class="stadium" style="font-size:0.92rem;">{{ m['Stadio'] }}</div>
         {% if m['Tipo Partita'] %}
