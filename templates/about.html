@@ -1,10 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="card">
   <h1>Chi Siamo</h1>
   <p>Il torneo Fut Rivals nasce nel 2024 come torneo per unire la passione per il calcio degli atleti del Polesine, con l’ambizione di intrattenere e regalare serate di amicizia e spettacolo a tutti gli appassionati e spettatori.<br>
   L’evento è attivamente sostenuto dalle imprese del territorio e molto seguito.</p>
-  <h2>Contatti</h2>
-  <p>Instagram: <b>fut.rivals.tournament</b></p>
   <h2>Organizzazione</h2>
   <p>Per qualsiasi evenienza il nostro staff è disponibile ad aiutare o chiarire ogni tuo dubbio. Unisciti a noi!</p>
+  <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem;">
+    <a href="https://www.instagram.com/fut.rivals.tournament/" target="_blank" class="btn-main" style="background: #00ff6a; color: #181818; text-decoration: none;">Segui su Instagram</a>
+    <a href="{{ url_for('static', filename='regolamento.pdf') }}" download class="btn-main" style="background: #00ff6a; color: #181818; text-decoration: none;">Scarica il Regolamento</a>
+  </div>
+</div>
 {% endblock %}

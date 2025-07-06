@@ -40,6 +40,7 @@ header.navbar {
   gap: 0.7rem;
 }
 .logo-container img {
+  border-radius: 50%;
   height: 38px;
   filter: drop-shadow(0 0 8px #00ff6a);
 }
