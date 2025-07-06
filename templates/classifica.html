@@ -25,8 +25,8 @@
               {% endif %}
               {{ row.Squadra }}
             </td>
-            <td>{{ row.PG }}</td><td>{{ row.V }}</td><td>{{ row.N }}</td><td>{{ row.P }}</td>
-            <td>{{ row.PT }}</td>
+            <td>{{ row['PG']|int }}</td><td>{{ row['V']|int }}</td><td>{{ row['N']|int }}</td><td>{{ row['P']|int }}</td>
+            <td>{{ row['PT']|int }}</td>
           </tr>
         {% endfor %}
       </tbody>
@@ -49,15 +49,15 @@
       <tbody>
         {% for row in standings if row.Girone == 'Girone B' %}
         <tr>
-          <td>{{ row.Pos }}</td>
+          <td>{{ row['Pos']|int }}</td>
             <td style="display:flex;align-items:center;gap:0.5rem;">
               {% if row['Logo Casa'] %}
                 <img src="{{ url_for('static', filename='squadre/' + row['Logo Casa']) }}" alt="Logo {{ row.Squadra }}" style="height:28px;width:28px;border-radius:50%;background:#222;border:2px solid #00ff6a;box-shadow:0 0 6px #00ff6a99;">
               {% endif %}
               {{ row.Squadra }}
             </td>
-          <td>{{ row.PG }}</td><td>{{ row.V }}</td><td>{{ row.N }}</td><td>{{ row.P }}</td>
-          <td>{{ row.PT }}</td>
+          <td>{{ row['PG']|int }}</td><td>{{ row['V']|int }}</td><td>{{ row['N']|int }}</td><td>{{ row['P']|int }}</td>
+          <td>{{ row['PT']|int }}</td>
         </tr>
       {% endfor %}
     </tbody>
