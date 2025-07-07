@@ -34,7 +34,7 @@ def get_next_match():
             }
     except Exception as e:
         print(f"Errore nella lettura del file Excel: {e}")
-    return None
+        return None
 
 # Funzione per ottenere le rose delle squadre
 # Ora usa la colonna 'Logo' dal foglio Classifiche se presente, così puoi associare qualsiasi file logo a qualsiasi squadra
@@ -74,7 +74,7 @@ def get_matches():
         df = pd.read_excel('DATITORNEO.xlsx', sheet_name='Calendario Partite', engine='openpyxl')
         df['Data'] = pd.to_datetime(df['Data'])
         matches = []
-        for _, row in df.iterrows():
+    for _, row in df.iterrows():
             matches.append({
                 'Data': row['Data'].strftime('%d/%m/%Y'),
                 'Ora': str(row['Ora'])[:5],
