@@ -17,7 +17,7 @@
     </thead>
     <tbody>
         {% for row in standings if row.Girone == 'Girone A' %}
-          <tr>
+        <tr>
             <td>{{ row['Pos']|int }}</td>
             <td style="display:flex;align-items:center;gap:0.5rem;">
               {% if row['Logo Casa'] %}

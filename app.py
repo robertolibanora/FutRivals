@@ -17,8 +17,8 @@ app = Flask(__name__)
 
 def get_next_match():
     try:
-        df = pd.read_excel('DATITORNEO.xlsx', sheet_name='Calendario Partite', engine='openpyxl')
-        print('DEBUG - Squadre Casa in Calendario Partite:', df['Squadra Casa'].unique())
+        df = pd.read_excel('DATITORNEO.xlsx', sheet_name='Prossime Partite', engine='openpyxl')
+        print('DEBUG - Squadre Casa in Prossime Partite:', df['Squadra Casa'].unique())
         if not df.empty:
             next_match = df.iloc[0]
             return {
