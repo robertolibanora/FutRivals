@@ -74,7 +74,7 @@ def get_matches():
         df = pd.read_excel('DATITORNEO.xlsx', sheet_name='Calendario Partite', engine='openpyxl')
         df['Data'] = pd.to_datetime(df['Data'])
         matches = []
-        for _, row in df.iterrows():
+    for _, row in df.iterrows():
             matches.append({
                 'Data': row['Data'].strftime('%d/%m/%Y'),
                 'Ora': str(row['Ora'])[:5],
