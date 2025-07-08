@@ -146,6 +146,12 @@ def about():
 def menu():
     return render_template('menu.html')
 
+# Pagina cerca giocatore: mostra tutte le rose per la ricerca
+@app.route('/cerca-giocatore')
+def cerca_giocatore():
+    teams = get_teams()
+    return render_template('cerca_giocatore.html', teams=teams)
+
 # Avvio dell'app Flask in modalità debug (solo per sviluppo)
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=1234)

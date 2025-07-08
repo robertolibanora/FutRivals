@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Cerca Giocatore</h1>
+  <div id="cerca-giocatore-card" class="card">
+    <label for="search">Cerca un giocatore:</label>
+    <input type="text" id="search" placeholder="Scrivi qui...">
+    <div id="results-wrapper"></div>
+  </div>
+  <script type="text/javascript">
+    const teams = {{ teams|tojson|safe }};
+    const searchInput = document.getElementById('search');
+    const resultsWrapper = document.getElementById('results-wrapper');
+    searchInput.addEventListener('input', function() {
+      const query = this.value.toLowerCase();
+      let html = '';
+      let found = [];
+      Object.entries(teams).forEach(([team, info]) => {
+        info.players.forEach(p => {
+          const giocatore = p.Giocatore ?? p.giocatore ?? '';
+          if (giocatore && giocatore.toLowerCase().includes(query)) {
+            found.push({
+              squadra: team,
+              numero: p.Numero ?? p.numero ?? '',
+              giocatore: giocatore,
+              goal: p.Goal ?? p.goal ?? 0
+            });
+          }
+        });
+      });
+      if (found.length > 0 && query.length > 0) {
+        html = `<table class='search-table'><thead><tr><th class='squadra'>Squadra</th><th>#</th><th class='giocatore'>Giocatore</th><th>Goal</th></tr></thead><tbody>`;
+        found.forEach(p => {
+          html += `<tr><td class='squadra'>${p.squadra}</td><td>${p.numero}</td><td class='giocatore'>${p.giocatore}</td><td>${p.goal}</td></tr>`;
+        });
+        html += '</tbody></table>';
+      } else if (query.length > 0) {
+        html = '<p style="text-align:center;color:#00ff6a;">Nessun risultato.</p>';
+      } else {
+        html = '';
+      }
+      resultsWrapper.innerHTML = html;
+    });
+  </script>
+  <style>
+    #cerca-giocatore-card {
+      max-width: 420px;
+      margin: 0 auto 1.2em auto;
+      padding: 1.2rem;
+      border-radius: 18px;
+      box-shadow: 0 2px 12px #0006;
+      border: 2px solid var(--futrivals-green);
+      background: var(--futrivals-gray);
+    }
+    #cerca-giocatore-card label {
+      font-size: 1.05em;
+      margin-bottom: 0.5em;
+      display: block;
+      color: #fff;
+      text-shadow: 0 0 6px #00ff6a;
+    }
+    #cerca-giocatore-card input[type="text"] {
+      width: 100%;
+      padding: 0.7em;
+      font-size: 1.1em;
+      margin-bottom: 0.7em;
+      border-radius: 8px;
+      border: 1.5px solid #00ff6a;
+      background: #101010;
+      color: #fff;
+      outline: none;
+      box-sizing: border-box;
+      transition: border 0.2s;
+    }
+    #cerca-giocatore-card input[type="text"]:focus {
+      border: 2px solid #00ff6a;
+      background: #181818;
+    }
+    .search-table {
+      width: 100%;
+      min-width: 0;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #181818;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-top: 0.5em;
+      font-size: 1.08em;
+      box-shadow: 0 2px 8px #00ff6a22;
+      border: 2.5px solid #00ff6a;
+      table-layout: auto;
+    }
+    .search-table thead tr {
+      background: #181818;
+      color: #00ff6a;
+      font-weight: bold;
+      font-size: 1.13em;
+      border-bottom: 4px solid #00ff6a;
+    }
+    .search-table th {
+      padding: 0.65em 0.3em;
+      border-bottom: 4px solid #00ff6a;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      background: #181818;
+      color: #00ff6a;
+      font-weight: bold;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .search-table th.squadra, .search-table td.squadra {
+      min-width: 100px;
+      max-width: 220px;
+      word-break: break-word;
+      white-space: normal;
+    }
+    .search-table th.giocatore, .search-table td.giocatore {
+      min-width: 80px;
+      max-width: 140px;
+      word-break: break-word;
+      white-space: normal;
+    }
+    .search-table td {
+      padding: 0.55em 0.3em;
+      border-bottom: 1px solid #00ff6a33;
+      color: #fff;
+      background: #181818;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 1em;
+      overflow-wrap: break-word;
+    }
+    .search-table tr:last-child td {
+      border-bottom: none;
+    }
+    @media (max-width: 600px) {
+      #cerca-giocatore-card { padding: 0.7em 0.2em !important; max-width: 98vw; }
+      #cerca-giocatore-card input { font-size: 1em !important; }
+      .search-table { font-size: 0.97em !important; min-width: 0 !important; }
+      .search-table th.squadra, .search-table td.squadra {
+        min-width: 70px;
+        max-width: 120px;
+      }
+      .search-table th.giocatore, .search-table td.giocatore {
+        min-width: 60px;
+        max-width: 90px;
+      }
+    }
+  </style>
+{% endblock %} 
