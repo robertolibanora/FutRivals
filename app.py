@@ -91,12 +91,32 @@ def get_matches():
         print(f"Errore nella lettura del calendario: {e}")
         return []
 
+# Funzione per ottenere i top 5 cannonieri dal foglio Rose
+
+def get_top_scorers():
+    try:
+        df = pd.read_excel('DATITORNEO.xlsx', sheet_name='Rose', engine='openpyxl')
+        # Correggi eventuali colonne 'Gol' in 'Goal'
+        if 'Gol' in df.columns:
+            df = df.rename(columns={'Gol': 'Goal'})
+        # Se la colonna è già 'Goal', non fa nulla
+        # Sostituisci NaN con 0 per i goal
+        df['Goal'] = pd.to_numeric(df['Goal'], errors='coerce').fillna(0).astype(int)
+        # Ordina per Goal decrescente e prendi i primi 5
+        top5 = df.sort_values(by='Goal', ascending=False).head(5)
+        # Restituisci solo le colonne utili
+        return top5[['Giocatore', 'Squadra', 'Goal']].to_dict('records')
+    except Exception as e:
+        print(f"Errore nel calcolo dei top cannonieri: {e}")
+        return []
+
 # ROUTES FLASK
 # Homepage: mostra la prossima partita
 @app.route('/')
 def index():
     next_match = get_next_match()
-    return render_template('index.html', next_match=next_match)
+    top_scorers = get_top_scorers()
+    return render_template('index.html', next_match=next_match, top_scorers=top_scorers)
 
 # Pagina rose: mostra le rose delle squadre
 @app.route('/rose')

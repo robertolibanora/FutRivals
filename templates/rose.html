@@ -23,9 +23,9 @@
         logoDiv.innerHTML = `<div style='display:flex;justify-content:center;'><img class='team-logo-big' src='/static/squadre/${teams[team].logo}' alt='Logo ${team}'></div>`;
         // DEBUG: mostra la struttura dei dati
         console.log(teams[team].players);
-        let html = `<div class='card'><h2>${team}</h2><table><thead><tr><th>#</th><th>Giocatore</th><th>Ruolo</th><th>Gol</th></tr></thead><tbody>`;
+        let html = `<div class='card'><h2>${team}</h2><table><thead><tr><th>#</th><th>Giocatore</th><th>Ruolo</th><th>Goal</th></tr></thead><tbody>`;
         teams[team].players.forEach(p => {
-          html += `<tr><td>${p.Numero ?? p.numero ?? ''}</td><td>${p.Giocatore ?? p.giocatore ?? ''}</td><td>${p.Ruolo ?? p.ruolo ?? ''}</td><td>${p.Gol ?? p.gol ?? 0}</td></tr>`;
+          html += `<tr><td>${p.Numero ?? p.numero ?? ''}</td><td>${p.Giocatore ?? p.giocatore ?? ''}</td><td>${p.Ruolo ?? p.ruolo ?? ''}</td><td>${p.Goal ?? p.goal ?? 0}</td></tr>`;
         });
         html += '</tbody></table></div>';
         rosaDiv.innerHTML = html;

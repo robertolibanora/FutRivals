@@ -34,6 +34,36 @@
     </div>
 </section>
 
+<section class="top-scorers">
+    <div class="card">
+        <h2>Top 5 Cannonieri</h2>
+        {% if top_scorers and top_scorers|length > 0 %}
+        <table style="width:100%;text-align:center;">
+            <thead>
+                <tr>
+                    <th>Pos</th>
+                    <th>Giocatore</th>
+                    <th>Squadra</th>
+                    <th>Goal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in top_scorers %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ p['Giocatore'] }}</td>
+                    <td>{{ p['Squadra'] }}</td>
+                    <td>{{ p['Goal'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>Nessun dato disponibile.</p>
+        {% endif %}
+    </div>
+</section>
+
 <section class="sponsors">
     <h2>I Nostri Sponsor</h2>
     <div class="sponsor-carousel">
