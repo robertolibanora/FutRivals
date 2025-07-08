@@ -18,7 +18,7 @@
             <div class="team away" style="font-size:1.25em;">{{ next_match.squadra_trasferta }}</div>
         </div>
         <div class="match-details">
-            <p class="date">{{ next_match.data.split(' ')[0] }}</p>
+            <p class="date">{{ next_match.data }}</p>
             <p class="time">{{ next_match.ora[:5] }}</p>
             <p class="stadium">{{ next_match.stadio }}</p>
             {% if next_match.tipo_partita %}

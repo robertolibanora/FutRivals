@@ -11,6 +11,7 @@
   --futrivals-gold: #ffd700;
   --futrivals-white: #fff;
   --futrivals-gray: #222;
+  --futrivals-red: #ff2b2b;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {

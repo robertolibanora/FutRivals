@@ -10,7 +10,20 @@
             <img class="team-logo-big" src="{{ url_for('static', filename='squadre/' + m['Logo Casa']) }}" alt="{{ m['Squadra Casa'] }}" style="margin-bottom:0.2em;">
             <div style="font-weight:bold;font-size:1.1em;">{{ m['Squadra Casa'] }}</div>
           </div>
-          <div class="vs vs-neon" style="align-self:center;">VS</div>
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.2em;">
+            <div class="vs vs-neon" style="align-self:center;">VS</div>
+            {% if m['Risultato'] and m['Risultato'] != '-' %}
+              {% set score_home = m['Risultato'].split('-')[0]|trim %}
+              {% set score_away = m['Risultato'].split('-')[1]|trim %}
+              {% set home_win = score_home|int > score_away|int %}
+              {% set away_win = score_away|int > score_home|int %}
+              <div style="display:flex;gap:0.3em;align-items:center;justify-content:center;">
+                <span class="score score-big-vs vs vs-neon" style="font-size:1.5rem; font-weight:900; text-align:center; margin-top:0.1em; color:{% if home_win %}var(--futrivals-green){% elif away_win %}var(--futrivals-red, #ff2b2b){% else %}var(--futrivals-gold){% endif %}; text-shadow:0 0 8px {% if home_win %}#00ff6a{% elif away_win %}#ff2b2b{% else %}#ffd700{% endif %};">{{ score_home }}</span>
+                <span style="font-size:1.5rem; font-weight:900; color:var(--futrivals-white);">-</span>
+                <span class="score score-big-vs vs vs-neon" style="font-size:1.5rem; font-weight:900; text-align:center; margin-top:0.1em; color:{% if away_win %}var(--futrivals-green){% elif home_win %}var(--futrivals-red, #ff2b2b){% else %}var(--futrivals-gold){% endif %}; text-shadow:0 0 8px {% if away_win %}#00ff6a{% elif home_win %}#ff2b2b{% else %}#ffd700{% endif %};">{{ score_away }}</span>
+              </div>
+            {% endif %}
+          </div>
           <div style="text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;width:40%;">
             <img class="team-logo-big" src="{{ url_for('static', filename='squadre/' + m['Logo Trasferta']) }}" alt="{{ m['Squadra Trasferta'] }}" style="margin-bottom:0.2em;">
             <div style="font-weight:bold;font-size:1.1em;">{{ m['Squadra Trasferta'] }}</div>
@@ -22,7 +35,8 @@
           <div class="tipo-partita" style="font-size:0.92rem; font-weight:600; margin-top:0.1rem;">{{ m['Tipo Partita'] }}</div>
         {% endif %}
         {% if m['Risultato'] and m['Risultato'] != '-' %}
-          <div class="score" style="font-size:1.1rem; font-weight:bold; margin-top:0.3rem; color:var(--futrivals-gold);">{{ m['Risultato'] }}</div>
+          {# Rimuovo la vecchia posizione del risultato #}
+          {# <div class="score" style="font-size:1.1rem; font-weight:bold; margin-top:0.3rem; color:var(--futrivals-gold);">{{ m['Risultato'] }}</div> #}
         {% endif %}
         {% if m['Girone'] %}
           <div class="girone" style="font-size:0.92rem; margin-top:0.1rem;">{{ m['Girone'] }}</div>

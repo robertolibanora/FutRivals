@@ -2,9 +2,34 @@ import pandas as pd
 from flask import Flask, render_template
 from datetime import datetime
 import os
+import locale
 
 # Inizializza l'app Flask
 app = Flask(__name__)
+
+# Imposta la localizzazione italiana per le date
+try:
+    locale.setlocale(locale.LC_TIME, 'it_IT.UTF-8')
+except locale.Error:
+    # Su alcuni sistemi MacOS potrebbe essere 'it_IT' o potrebbe non essere disponibile
+    try:
+        locale.setlocale(locale.LC_TIME, 'it_IT')
+    except locale.Error:
+        pass  # fallback: non cambiare locale
+
+# Funzione per formattare la data in stile italiano: 'Lunedì-01-gennaio-2024'
+def formatta_data_italiana(data_str):
+    try:
+        # Gestisce sia stringhe che oggetti datetime
+        if isinstance(data_str, str):
+            # Prova a convertire la stringa in datetime
+            data = pd.to_datetime(data_str)
+        else:
+            data = data_str
+        return data.strftime('%A-%d-%B-%Y').capitalize()
+    except Exception as e:
+        print(f"Errore nella formattazione della data: {e}")
+        return str(data_str)
 
 # Funzione per creare il file Excel con i fogli e colonne necessari se non esiste già
 # Questo permette all'app di funzionare anche al primo avvio senza dati reali
@@ -21,8 +46,10 @@ def get_next_match():
         print('DEBUG - Squadre Casa in Prossime Partite:', df['Squadra Casa'].unique())
         if not df.empty:
             next_match = df.iloc[0]
+            # Usa la nuova funzione per la data
+            data_formattata = formatta_data_italiana(next_match['Data'])
             return {
-                'data': str(next_match['Data']),
+                'data': data_formattata,
                 'ora': str(next_match['Ora']),
                 'stadio': next_match['Stadio'],
                 'squadra_casa': next_match['Squadra Casa'],
@@ -75,8 +102,9 @@ def get_matches():
         df['Data'] = pd.to_datetime(df['Data'])
         matches = []
         for _, row in df.iterrows():
+            data_formattata = formatta_data_italiana(row['Data'])
             matches.append({
-                'Data': row['Data'].strftime('%d/%m/%Y'),
+                'Data': data_formattata,
                 'Ora': str(row['Ora'])[:5],
                 'Stadio': row['Stadio'],
                 'Squadra Casa': row['Squadra Casa'],
@@ -84,7 +112,8 @@ def get_matches():
                 'Squadra Trasferta': row['Squadra Trasferta'],
                 'Logo Trasferta': row['Logo Trasferta'],
                 'Risultato': row['Risultato'],
-                'Tipo Partita': row.get('Tipo Partita', '')
+                'Tipo Partita': row.get('Tipo Partita', ''),
+                'Girone': row.get('Girone', '')
             })
         return matches
     except Exception as e:
