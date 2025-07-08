@@ -69,6 +69,10 @@ def get_next_match():
 def get_teams():
     try:
         df = pd.read_excel('DATITORNEO.xlsx', sheet_name='Rose', engine='openpyxl')
+        # Normalizza la colonna Goal/Gol come in get_top_scorers
+        if 'Gol' in df.columns:
+            df = df.rename(columns={'Gol': 'Goal'})
+        df['Goal'] = pd.to_numeric(df['Goal'], errors='coerce').fillna(0).astype(int)
         # Carica anche la tabella Classifiche per i loghi personalizzati
         df_logo = pd.read_excel('DATITORNEO.xlsx', sheet_name='Classifiche', engine='openpyxl')
         print('DEBUG - Squadre in Classifiche:', df_logo['Squadra'].unique())
