@@ -199,12 +199,12 @@ def cerca_giocatore():
     teams = get_teams()
     return render_template('cerca_giocatore.html', teams=teams)
 
-# Pagina nascosta: mostra il numero di utenti online e i dettagli utenti (user_id, os, browser, device, modello)
+# Pagina nascosta: mostra il numero di utenti online e i dettagli utenti (user_id, ip, os, browser, device, modello)
 @app.route('/admin/utenti-online')
 def admin_utenti_online():
     aggiorna_utente_online()
     n_utenti = conta_utenti_online()
-    utenti = get_utenti_attivi(180)  # lista di tuple (user_id, sistema operativo, browser, device, modello)
+    utenti = get_utenti_attivi(180)  # lista di tuple (user_id, ip, sistema operativo, browser, device, modello)
     return render_template('utenti_online.html', n_utenti=n_utenti, utenti=utenti)
 
 # Avvio dell'app Flask in modalità debug (solo per sviluppo)

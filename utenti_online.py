@@ -2,7 +2,7 @@ import time
 from flask import request
 import re
 
-# Dizionario in memoria: {user_id: (timestamp_ultimo_accesso, sistema_operativo, browser, device, modello)}
+# Dizionario in memoria: {(user_id, ip): (timestamp_ultimo_accesso, sistema_operativo, browser, device, modello)}
 utenti_attivi = {}
 
 # Timeout in secondi per considerare un utente "online" (es: 5 minuti)
@@ -76,29 +76,28 @@ def estrai_modello(user_agent):
     return "?"
 
 def get_user_id():
-    # Prova a leggere il cookie user_id, fallback su IP
     user_id = request.cookies.get('user_id')
-    if user_id:
-        return user_id
-    return request.remote_addr
+    return user_id
 
 def aggiorna_utente_online():
     user_id = get_user_id()
+    ip = request.remote_addr
     user_agent = request.headers.get('User-Agent', '')
     sistema = estrai_sistema_operativo(user_agent)
     browser = estrai_browser(user_agent)
     device = estrai_device(user_agent)
     modello = estrai_modello(user_agent)
-    utenti_attivi[user_id] = (time.time(), sistema, browser, device, modello)
+    key = (user_id if user_id else None, ip)
+    utenti_attivi[key] = (time.time(), sistema, browser, device, modello)
 
 def conta_utenti_online():
     now = time.time()
-    utenti_vivi = {uid: (ts, so, br, dev, mod) for uid, (ts, so, br, dev, mod) in utenti_attivi.items() if now - ts < TIMEOUT}
+    utenti_vivi = {k: v for k, v in utenti_attivi.items() if now - v[0] < TIMEOUT}
     utenti_attivi.clear()
     utenti_attivi.update(utenti_vivi)
     return len(utenti_attivi)
 
 def get_utenti_attivi(secondi=180):
     now = time.time()
-    # Restituisce lista di tuple (user_id, sistema operativo, browser, device, modello)
-    return [(uid, so, br, dev, mod) for uid, (ts, so, br, dev, mod) in utenti_attivi.items() if now - ts < secondi] 
+    # Restituisce lista di tuple (user_id, ip, sistema operativo, browser, device, modello)
+    return [((uid if uid else 'NOCOOKIE'), ip, so, br, dev, mod) for (uid, ip), (ts, so, br, dev, mod) in utenti_attivi.items() if now - ts < secondi] 
