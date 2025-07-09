@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
   <div class="card" style="margin-top:2em;text-align:center;max-width:900px;margin-left:auto;margin-right:auto;">
+    {% if not cookies_ok %}
+      <div style="background:#ff2b2b;color:#fff;padding:1em 0.5em;margin-bottom:1.2em;border-radius:10px;font-weight:bold;">
+        ATTENZIONE: Nessun browser accetta i cookie! Su alcuni dispositivi (es. iPhone/Safari) il conteggio potrebbe essere meno preciso.<br>
+        Prova a disattivare la modalità privata o a consentire i cookie nelle impostazioni del browser.
+      </div>
+    {% endif %}
     <h1 style="margin-bottom:0.5em;">Utenti collegati</h1>
     <p style="font-size:2.5em;color:#00ff6a;font-weight:bold;margin:0;">{{ n_utenti }}</p>
     <p style="color:#888;margin-bottom:2em;">(negli ultimi 5 minuti)</p>
@@ -9,7 +15,7 @@
     <table style="width:100%;margin-top:1em;background:#181818;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px #00ff6a22;border:2px solid #00ff6a;">
       <thead>
         <tr style="background:#101010;color:#00ff6a;font-weight:bold;">
-          <th style="padding:0.6em 0.2em;">Chiave utente</th>
+          <th style="padding:0.6em 0.2em;">Chiave utente / IP</th>
           <th style="padding:0.6em 0.2em;">Indirizzo IP</th>
           <th style="padding:0.6em 0.2em;">Sistema operativo</th>
           <th style="padding:0.6em 0.2em;">Browser</th>
@@ -32,7 +38,7 @@
         {% endfor %}
       </tbody>
     </table>
-    <p style="color:#888;font-size:0.95em;margin-top:1.5em;">La chiave utente è una stringa breve anonima che resta invariata anche dopo un nuovo deploy o se cambia l'indirizzo IP, finché non si cancellano i cookie o si cambia browser/dispositivo. Se il browser non accetta i cookie, viene usato solo l'indirizzo IP.</p>
+    <p style="color:#888;font-size:0.95em;margin-top:1.5em;">La chiave utente è una stringa breve anonima che resta invariata anche dopo un nuovo deploy o se cambia l'indirizzo IP, finché non si cancellano i cookie o si cambia browser/dispositivo. Se il browser non accetta i cookie, viene usato solo l'indirizzo IP e il conteggio può essere meno preciso.</p>
   </div>
   <script>
     setTimeout(function() {

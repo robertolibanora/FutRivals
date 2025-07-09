@@ -3,7 +3,7 @@ from flask import Flask, render_template
 from datetime import datetime
 import os
 import locale
-from utenti_online import aggiorna_utente_online, conta_utenti_online, get_utenti_attivi
+from utenti_online import aggiorna_utente_online, conta_utenti_online, get_utenti_attivi, browser_accetta_cookie
 
 # Inizializza l'app Flask
 app = Flask(__name__)
@@ -199,13 +199,14 @@ def cerca_giocatore():
     teams = get_teams()
     return render_template('cerca_giocatore.html', teams=teams)
 
-# Pagina nascosta: mostra il numero di utenti online e i dettagli utenti (user_id, ip, os, browser, device, modello)
+# Pagina nascosta: mostra il numero di utenti online e i dettagli utenti (identificatore, ip, os, browser, device, modello)
 @app.route('/admin/utenti-online')
 def admin_utenti_online():
     aggiorna_utente_online()
     n_utenti = conta_utenti_online()
-    utenti = get_utenti_attivi(180)  # lista di tuple (user_id, ip, sistema operativo, browser, device, modello)
-    return render_template('utenti_online.html', n_utenti=n_utenti, utenti=utenti)
+    utenti = get_utenti_attivi(180)  # lista di tuple (identificatore, ip, sistema operativo, browser, device, modello)
+    cookies_ok = browser_accetta_cookie()
+    return render_template('utenti_online.html', n_utenti=n_utenti, utenti=utenti, cookies_ok=cookies_ok)
 
 # Avvio dell'app Flask in modalità debug (solo per sviluppo)
 if __name__ == "__main__":

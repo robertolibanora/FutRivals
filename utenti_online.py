@@ -2,7 +2,7 @@ import time
 from flask import request
 import re
 
-# Dizionario in memoria: {(user_id, ip): (timestamp_ultimo_accesso, sistema_operativo, browser, device, modello)}
+# Dizionario in memoria: {identificatore: (timestamp_ultimo_accesso, sistema_operativo, browser, device, modello, ip)}
 utenti_attivi = {}
 
 # Timeout in secondi per considerare un utente "online" (es: 5 minuti)
@@ -87,8 +87,9 @@ def aggiorna_utente_online():
     browser = estrai_browser(user_agent)
     device = estrai_device(user_agent)
     modello = estrai_modello(user_agent)
-    key = (user_id if user_id else None, ip)
-    utenti_attivi[key] = (time.time(), sistema, browser, device, modello)
+    # Identificatore: chiave utente se presente, altrimenti IP
+    identificatore = user_id if user_id else ip
+    utenti_attivi[identificatore] = (time.time(), sistema, browser, device, modello, ip)
 
 def conta_utenti_online():
     now = time.time()
@@ -99,5 +100,12 @@ def conta_utenti_online():
 
 def get_utenti_attivi(secondi=180):
     now = time.time()
-    # Restituisce lista di tuple (user_id, ip, sistema operativo, browser, device, modello)
-    return [((uid if uid else 'NOCOOKIE'), ip, so, br, dev, mod) for (uid, ip), (ts, so, br, dev, mod) in utenti_attivi.items() if now - ts < secondi] 
+    # Restituisce lista di tuple (identificatore, ip, sistema operativo, browser, device, modello)
+    return [(k, v[5], v[1], v[2], v[3], v[4]) for k, v in utenti_attivi.items() if now - v[0] < secondi]
+
+def browser_accetta_cookie():
+    # Se almeno un utente ha una chiave diversa da un IP, vuol dire che almeno un browser accetta i cookie
+    for k in utenti_attivi.keys():
+        if not (k.count('.') == 3 and all(part.isdigit() for part in k.split('.'))):
+            return True
+    return False 
