@@ -17,4 +17,8 @@ def conta_utenti_online():
     utenti_vivi = {ip: ts for ip, ts in utenti_attivi.items() if now - ts < TIMEOUT}
     utenti_attivi.clear()
     utenti_attivi.update(utenti_vivi)
-    return len(utenti_attivi) 
+    return len(utenti_attivi)
+
+def get_ip_attivi(secondi=180):
+    now = time.time()
+    return [ip for ip, ts in utenti_attivi.items() if now - ts < secondi] 
