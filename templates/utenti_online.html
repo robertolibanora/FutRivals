@@ -9,7 +9,7 @@
     <table style="width:100%;margin-top:1em;background:#181818;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px #00ff6a22;border:2px solid #00ff6a;">
       <thead>
         <tr style="background:#101010;color:#00ff6a;font-weight:bold;">
-          <th style="padding:0.6em 0.2em;">ID utente</th>
+          <th style="padding:0.6em 0.2em;">Chiave utente</th>
           <th style="padding:0.6em 0.2em;">Sistema operativo</th>
           <th style="padding:0.6em 0.2em;">Browser</th>
           <th style="padding:0.6em 0.2em;">Dispositivo</th>
@@ -19,7 +19,7 @@
       <tbody>
         {% for uid, so, br, dev, mod in utenti %}
           <tr>
-            <td style="padding:0.5em 0.2em;color:#fff;max-width:120px;overflow-wrap:break-word;" title="{{ uid }}">{{ uid[:8] }}...{{ uid[-4:] }}</td>
+            <td style="padding:0.5em 0.2em;color:#fff;font-weight:bold;font-size:1.15em;">{{ uid }}</td>
             <td style="padding:0.5em 0.2em;color:#00ff6a;">{{ so }}</td>
             <td style="padding:0.5em 0.2em;color:#ffd700;">{{ br }}</td>
             <td style="padding:0.5em 0.2em;color:#00bfff;">{{ dev }}</td>
@@ -30,7 +30,7 @@
         {% endfor %}
       </tbody>
     </table>
-    <p style="color:#888;font-size:0.95em;margin-top:1.5em;">L'ID utente è anonimo e cambia solo se si cancellano i cookie o si cambia browser/dispositivo.</p>
+    <p style="color:#888;font-size:0.95em;margin-top:1.5em;">La chiave utente è una stringa breve anonima che resta invariata anche dopo un nuovo deploy o se cambia l'indirizzo IP, finché non si cancellano i cookie o si cambia browser/dispositivo.</p>
   </div>
   <script>
     setTimeout(function() {

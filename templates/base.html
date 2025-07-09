@@ -40,20 +40,22 @@
     }
   </script>
   <script>
-    // Funzione per generare un UUID v4
-    function generateUUID() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-      });
+    // Funzione per generare una stringa breve alfanumerica di 8 caratteri
+    function generateShortId(length = 8) {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
     }
     // Imposta il cookie se non esiste
     function setUserIdCookie() {
       if (!document.cookie.split('; ').find(row => row.startsWith('user_id='))) {
-        var uuid = generateUUID();
+        var shortId = generateShortId();
         var expires = new Date();
         expires.setFullYear(expires.getFullYear() + 1); // 1 anno
-        document.cookie = 'user_id=' + uuid + '; expires=' + expires.toUTCString() + '; path=/; SameSite=Lax';
+        document.cookie = 'user_id=' + shortId + '; expires=' + expires.toUTCString() + '; path=/; SameSite=Lax';
       }
     }
     setUserIdCookie();
