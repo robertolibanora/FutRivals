@@ -1,44 +1,45 @@
 {% extends "base.html" %}
 {% block content %}
-  <div class="card" style="margin-top:2em;text-align:center;max-width:900px;margin-left:auto;margin-right:auto;">
-    {% if not cookies_ok %}
-      <div style="background:#ff2b2b;color:#fff;padding:1em 0.5em;margin-bottom:1.2em;border-radius:10px;font-weight:bold;">
-        ATTENZIONE: Nessun browser accetta i cookie! Su alcuni dispositivi (es. iPhone/Safari) il conteggio potrebbe essere meno preciso.<br>
-        Prova a disattivare la modalità privata o a consentire i cookie nelle impostazioni del browser.
-      </div>
-    {% endif %}
-    <h1 style="margin-bottom:0.5em;">Utenti collegati</h1>
-    <p style="font-size:2.5em;color:#00ff6a;font-weight:bold;margin:0;">{{ n_utenti }}</p>
-    <p style="color:#888;margin-bottom:2em;">(negli ultimi 5 minuti)</p>
+  <div class="card" style="margin-top:2em;text-align:center;max-width:950px;margin-left:auto;margin-right:auto;">
+    <h1 style="margin-bottom:0.5em; color:#00ff6a; text-shadow:0 0 8px #00ff6a;">Monitor Utenti Online</h1>
+    <p style="font-size:2.2em;color:#ffd700;font-weight:bold;margin:0;">{{ n_utenti }} utenti attivi</p>
+    <p style="color:#888;margin-bottom:2em;">(conteggiati negli ultimi 3 minuti)</p>
     <hr style="margin:2em 0;">
-    <h2 style="font-size:1.2em; color:#00ff6a;">Utenti attivi negli ultimi 180 secondi</h2>
-    <table style="width:100%;margin-top:1em;background:#181818;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px #00ff6a22;border:2px solid #00ff6a;">
+    <h2 style="font-size:1.2em; color:#00ff6a; margin-bottom:1em;">Dettaglio utenti attivi</h2>
+    <table style="width:100%;margin-top:1em;background:#181818;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px #00ff6a22;border:2px solid #00ff6a;font-size:1.08em;">
       <thead>
         <tr style="background:#101010;color:#00ff6a;font-weight:bold;">
-          <th style="padding:0.6em 0.2em;">Chiave utente / IP</th>
-          <th style="padding:0.6em 0.2em;">Indirizzo IP</th>
-          <th style="padding:0.6em 0.2em;">Sistema operativo</th>
-          <th style="padding:0.6em 0.2em;">Browser</th>
-          <th style="padding:0.6em 0.2em;">Dispositivo</th>
-          <th style="padding:0.6em 0.2em;">Modello</th>
+          <th style="padding:0.7em 0.2em;">Chiave utente<br><span style='font-size:0.85em;color:#ffd700;'>(anonima)</span></th>
+          <th style="padding:0.7em 0.2em;">Indirizzo IP</th>
+          <th style="padding:0.7em 0.2em;">Sistema operativo</th>
+          <th style="padding:0.7em 0.2em;">Browser</th>
+          <th style="padding:0.7em 0.2em;">Dispositivo</th>
+          <th style="padding:0.7em 0.2em;">Modello</th>
         </tr>
       </thead>
       <tbody>
         {% for uid, ip, so, br, dev, mod in utenti %}
-          <tr>
-            <td style="padding:0.5em 0.2em;color:#fff;font-weight:bold;font-size:1.15em;">{{ uid }}</td>
-            <td style="padding:0.5em 0.2em;color:#fff;">{{ ip }}</td>
-            <td style="padding:0.5em 0.2em;color:#00ff6a;">{{ so }}</td>
-            <td style="padding:0.5em 0.2em;color:#ffd700;">{{ br }}</td>
-            <td style="padding:0.5em 0.2em;color:#00bfff;">{{ dev }}</td>
-            <td style="padding:0.5em 0.2em;color:#fff;">{{ mod }}</td>
+          <tr style="background: {% if loop.index0 % 2 == 0 %}#222{% else %}#181818{% endif %};">
+            <td style="padding:0.6em 0.2em;color:#fff;font-weight:bold;font-size:1.15em;">{{ uid }}</td>
+            <td style="padding:0.6em 0.2em;color:#fff;">{{ ip }}</td>
+            <td style="padding:0.6em 0.2em;color:#00ff6a;">{{ so }}</td>
+            <td style="padding:0.6em 0.2em;color:#ffd700;">{{ br }}</td>
+            <td style="padding:0.6em 0.2em;color:#00bfff;">{{ dev }}</td>
+            <td style="padding:0.6em 0.2em;color:#fff;">{{ mod }}</td>
           </tr>
         {% else %}
-          <tr><td colspan="6" style="color:#888;padding:0.7em;">Nessun utente attivo negli ultimi 180 secondi.</td></tr>
+          <tr><td colspan="6" style="color:#888;padding:1.2em;font-size:1.1em;">Nessun utente attivo negli ultimi 3 minuti.</td></tr>
         {% endfor %}
       </tbody>
     </table>
-    <p style="color:#888;font-size:0.95em;margin-top:1.5em;">La chiave utente è una stringa breve anonima che resta invariata anche dopo un nuovo deploy o se cambia l'indirizzo IP, finché non si cancellano i cookie o si cambia browser/dispositivo. Se il browser non accetta i cookie, viene usato solo l'indirizzo IP e il conteggio può essere meno preciso.</p>
+    <div style="margin-top:2em;text-align:left;color:#888;font-size:1.03em;max-width:700px;margin-left:auto;margin-right:auto;">
+      <b>Legenda:</b><br>
+      <span style="color:#ffd700;font-weight:bold;">Chiave utente</span>: identificatore anonimo e persistente (cookie, cambia solo se si cancellano i cookie o si cambia browser/dispositivo).<br>
+      <span style="color:#fff;font-weight:bold;">Indirizzo IP</span>: usato solo se il browser non accetta i cookie.<br>
+      <span style="color:#00ff6a;">Sistema operativo</span>, <span style="color:#ffd700;">Browser</span>, <span style="color:#00bfff;">Dispositivo</span>, <span style="color:#fff;">Modello</span>: informazioni tecniche rilevate dal browser.<br>
+      <br>
+      <b>Nota:</b> la lista si aggiorna ogni 5 secondi e mostra solo chi ha fatto attività negli ultimi 180 secondi.
+    </div>
   </div>
   <script>
     setTimeout(function() {

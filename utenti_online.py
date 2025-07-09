@@ -2,11 +2,11 @@ import time
 from flask import request
 import re
 
+# Timeout in secondi per considerare un utente "online" (ora 3 minuti)
+TIMEOUT = 180
+
 # Dizionario in memoria: {identificatore: (timestamp_ultimo_accesso, sistema_operativo, browser, device, modello, ip)}
 utenti_attivi = {}
-
-# Timeout in secondi per considerare un utente "online" (es: 5 minuti)
-TIMEOUT = 300
 
 def estrai_sistema_operativo(user_agent):
     if not user_agent:
@@ -98,7 +98,7 @@ def conta_utenti_online():
     utenti_attivi.update(utenti_vivi)
     return len(utenti_attivi)
 
-def get_utenti_attivi(secondi=180):
+def get_utenti_attivi(secondi=TIMEOUT):
     now = time.time()
     # Restituisce lista di tuple (identificatore, ip, sistema operativo, browser, device, modello)
     return [(k, v[5], v[1], v[2], v[3], v[4]) for k, v in utenti_attivi.items() if now - v[0] < secondi]
