@@ -3,6 +3,7 @@ from flask import Flask, render_template
 from datetime import datetime
 import os
 import locale
+from utenti_online import aggiorna_utente_online, conta_utenti_online
 
 # Inizializza l'app Flask
 app = Flask(__name__)
@@ -197,6 +198,13 @@ def menu():
 def cerca_giocatore():
     teams = get_teams()
     return render_template('cerca_giocatore.html', teams=teams)
+
+# Pagina nascosta: mostra il numero di utenti online
+@app.route('/admin/utenti-online')
+def admin_utenti_online():
+    aggiorna_utente_online()
+    n_utenti = conta_utenti_online()
+    return render_template('utenti_online.html', n_utenti=n_utenti)
 
 # Avvio dell'app Flask in modalità debug (solo per sviluppo)
 if __name__ == "__main__":
