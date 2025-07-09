@@ -19,6 +19,16 @@ except locale.Error:
 
 # Funzione per formattare la data in stile italiano: 'Lunedì-01-gennaio-2024'
 def formatta_data_italiana(data_str):
+    mesi = {
+        "January": "Gennaio", "February": "Febbraio", "March": "Marzo",
+        "April": "Aprile", "May": "Maggio", "June": "Giugno",
+        "July": "Luglio", "August": "Agosto", "September": "Settembre",
+        "October": "Ottobre", "November": "Novembre", "December": "Dicembre"
+    }
+    giorni = {
+        "Monday": "Lunedì", "Tuesday": "Martedì", "Wednesday": "Mercoledì",
+        "Thursday": "Giovedì", "Friday": "Venerdì", "Saturday": "Sabato", "Sunday": "Domenica"
+    }
     try:
         # Gestisce sia stringhe che oggetti datetime
         if isinstance(data_str, str):
@@ -26,7 +36,10 @@ def formatta_data_italiana(data_str):
             data = pd.to_datetime(data_str)
         else:
             data = data_str
-        return data.strftime('%A-%d-%B-%Y').capitalize()
+        nome_giorno = giorni[data.strftime("%A")]
+        nome_mese = mesi[data.strftime("%B")]
+        # Formato: Giovedì-10-Luglio-2025
+        return f"{nome_giorno}-{data.day:02d}-{nome_mese}-{data.year}"
     except Exception as e:
         print(f"Errore nella formattazione della data: {e}")
         return str(data_str)
