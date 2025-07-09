@@ -161,6 +161,7 @@ def get_top_scorers():
 # Homepage: mostra la prossima partita
 @app.route('/')
 def index():
+    aggiorna_utente_online()
     next_match = get_next_match()
     top_scorers = get_top_scorers()
     return render_template('index.html', next_match=next_match, top_scorers=top_scorers)
@@ -202,7 +203,6 @@ def cerca_giocatore():
 # Pagina nascosta: mostra il numero di utenti online e i dettagli utenti (identificatore, ip, os, browser, device, modello)
 @app.route('/admin/utenti-online')
 def admin_utenti_online():
-    aggiorna_utente_online()
     n_utenti = conta_utenti_online()
     utenti = get_utenti_attivi(180)  # lista di tuple (identificatore, ip, sistema operativo, browser, device, modello)
     cookies_ok = browser_accetta_cookie()
