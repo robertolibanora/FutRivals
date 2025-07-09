@@ -2,7 +2,7 @@ import time
 from flask import request
 import re
 
-# Dizionario in memoria: {ip: (timestamp_ultimo_accesso, sistema_operativo, browser, device)}
+# Dizionario in memoria: {user_id: (timestamp_ultimo_accesso, sistema_operativo, browser, device, modello)}
 utenti_attivi = {}
 
 # Timeout in secondi per considerare un utente "online" (es: 5 minuti)
@@ -52,22 +52,53 @@ def estrai_device(user_agent):
         return "Desktop"
     return "Altro"
 
+def estrai_modello(user_agent):
+    if not user_agent:
+        return "?"
+    ua = user_agent
+    # Android: cerca modello tra ; e )
+    if "Android" in ua:
+        m = re.search(r"Android [^;]+; ([^)]+)\)", ua)
+        if m:
+            return m.group(1).strip()
+    # iPhone/iPad: solo tipo
+    if "iPhone" in ua:
+        return "iPhone"
+    if "iPad" in ua:
+        return "iPad"
+    # Windows/Mac/Linux: generico
+    if "Windows" in ua:
+        return "PC Windows"
+    if "Macintosh" in ua:
+        return "Mac"
+    if "Linux" in ua:
+        return "PC Linux"
+    return "?"
+
+def get_user_id():
+    # Prova a leggere il cookie user_id, fallback su IP
+    user_id = request.cookies.get('user_id')
+    if user_id:
+        return user_id
+    return request.remote_addr
+
 def aggiorna_utente_online():
-    ip = request.remote_addr
+    user_id = get_user_id()
     user_agent = request.headers.get('User-Agent', '')
     sistema = estrai_sistema_operativo(user_agent)
     browser = estrai_browser(user_agent)
     device = estrai_device(user_agent)
-    utenti_attivi[ip] = (time.time(), sistema, browser, device)
+    modello = estrai_modello(user_agent)
+    utenti_attivi[user_id] = (time.time(), sistema, browser, device, modello)
 
 def conta_utenti_online():
     now = time.time()
-    utenti_vivi = {ip: (ts, so, br, dev) for ip, (ts, so, br, dev) in utenti_attivi.items() if now - ts < TIMEOUT}
+    utenti_vivi = {uid: (ts, so, br, dev, mod) for uid, (ts, so, br, dev, mod) in utenti_attivi.items() if now - ts < TIMEOUT}
     utenti_attivi.clear()
     utenti_attivi.update(utenti_vivi)
     return len(utenti_attivi)
 
-def get_ip_attivi(secondi=180):
+def get_utenti_attivi(secondi=180):
     now = time.time()
-    # Restituisce lista di tuple (ip, sistema operativo, browser, device)
-    return [(ip, so, br, dev) for ip, (ts, so, br, dev) in utenti_attivi.items() if now - ts < secondi] 
+    # Restituisce lista di tuple (user_id, sistema operativo, browser, device, modello)
+    return [(uid, so, br, dev, mod) for uid, (ts, so, br, dev, mod) in utenti_attivi.items() if now - ts < secondi] 

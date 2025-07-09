@@ -39,5 +39,24 @@
       });
     }
   </script>
+  <script>
+    // Funzione per generare un UUID v4
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+    // Imposta il cookie se non esiste
+    function setUserIdCookie() {
+      if (!document.cookie.split('; ').find(row => row.startsWith('user_id='))) {
+        var uuid = generateUUID();
+        var expires = new Date();
+        expires.setFullYear(expires.getFullYear() + 1); // 1 anno
+        document.cookie = 'user_id=' + uuid + '; expires=' + expires.toUTCString() + '; path=/; SameSite=Lax';
+      }
+    }
+    setUserIdCookie();
+  </script>
 </body>
 </html>

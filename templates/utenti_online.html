@@ -1,32 +1,40 @@
 {% extends "base.html" %}
 {% block content %}
-  <div class="card" style="margin-top:2em;text-align:center;max-width:600px;margin-left:auto;margin-right:auto;">
+  <div class="card" style="margin-top:2em;text-align:center;max-width:800px;margin-left:auto;margin-right:auto;">
     <h1 style="margin-bottom:0.5em;">Utenti collegati</h1>
     <p style="font-size:2.5em;color:#00ff6a;font-weight:bold;margin:0;">{{ n_utenti }}</p>
     <p style="color:#888;margin-bottom:2em;">(negli ultimi 5 minuti)</p>
     <hr style="margin:2em 0;">
-    <h2 style="font-size:1.2em; color:#00ff6a;">IP attivi negli ultimi 180 secondi</h2>
+    <h2 style="font-size:1.2em; color:#00ff6a;">Utenti attivi negli ultimi 180 secondi</h2>
     <table style="width:100%;margin-top:1em;background:#181818;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px #00ff6a22;border:2px solid #00ff6a;">
       <thead>
         <tr style="background:#101010;color:#00ff6a;font-weight:bold;">
-          <th style="padding:0.6em 0.2em;">Indirizzo IP</th>
+          <th style="padding:0.6em 0.2em;">ID utente</th>
           <th style="padding:0.6em 0.2em;">Sistema operativo</th>
           <th style="padding:0.6em 0.2em;">Browser</th>
           <th style="padding:0.6em 0.2em;">Dispositivo</th>
+          <th style="padding:0.6em 0.2em;">Modello</th>
         </tr>
       </thead>
       <tbody>
-        {% for ip, so, br, dev in ip_attivi %}
+        {% for uid, so, br, dev, mod in utenti %}
           <tr>
-            <td style="padding:0.5em 0.2em;color:#fff;">{{ ip }}</td>
+            <td style="padding:0.5em 0.2em;color:#fff;max-width:120px;overflow-wrap:break-word;" title="{{ uid }}">{{ uid[:8] }}...{{ uid[-4:] }}</td>
             <td style="padding:0.5em 0.2em;color:#00ff6a;">{{ so }}</td>
             <td style="padding:0.5em 0.2em;color:#ffd700;">{{ br }}</td>
             <td style="padding:0.5em 0.2em;color:#00bfff;">{{ dev }}</td>
+            <td style="padding:0.5em 0.2em;color:#fff;">{{ mod }}</td>
           </tr>
         {% else %}
-          <tr><td colspan="4" style="color:#888;padding:0.7em;">Nessun IP attivo negli ultimi 180 secondi.</td></tr>
+          <tr><td colspan="5" style="color:#888;padding:0.7em;">Nessun utente attivo negli ultimi 180 secondi.</td></tr>
         {% endfor %}
       </tbody>
     </table>
+    <p style="color:#888;font-size:0.95em;margin-top:1.5em;">L'ID utente è anonimo e cambia solo se si cancellano i cookie o si cambia browser/dispositivo.</p>
   </div>
+  <script>
+    setTimeout(function() {
+      window.location.reload();
+    }, 5000);
+  </script>
 {% endblock %} 
