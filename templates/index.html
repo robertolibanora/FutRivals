@@ -1,6 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
+<script>
+  // Funzione per generare una stringa breve alfanumerica di 5 caratteri
+  function generateShortId(length = 5) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }
+  // Imposta il cookie se non esiste (solo homepage)
+  function setUserIdCookie() {
+    if (!document.cookie.split('; ').find(row => row.startsWith('user_id='))) {
+      var shortId = generateShortId();
+      var expires = new Date();
+      expires.setFullYear(expires.getFullYear() + 1); // 1 anno
+      document.cookie = 'user_id=' + shortId + '; expires=' + expires.toUTCString() + '; path=/; SameSite=Lax';
+    }
+  }
+  setUserIdCookie();
+</script>
 <section class="hero">
     <h1>FUT RIVALS TOURNAMENT</h1>
     <div class="card">

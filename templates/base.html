@@ -12,26 +12,13 @@
   </style>
 </head>
 <body>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
   <script>
-    // Funzione per generare una stringa breve alfanumerica di 5 caratteri
-    function generateShortId(length = 5) {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      let result = '';
-      for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return result;
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/static/service-worker.js');
+      });
     }
-    // Imposta il cookie se non esiste (senza banner)
-    function setUserIdCookie() {
-      if (!document.cookie.split('; ').find(row => row.startsWith('user_id='))) {
-        var shortId = generateShortId();
-        var expires = new Date();
-        expires.setFullYear(expires.getFullYear() + 1); // 1 anno
-        document.cookie = 'user_id=' + shortId + '; expires=' + expires.toUTCString() + '; path=/; SameSite=Lax';
-      }
-    }
-    setUserIdCookie();
   </script>
   <header class="navbar">
     <div class="logo-container">
@@ -55,13 +42,5 @@
   <footer>
     © 2025 Fut Rivals – Tutti i diritti riservati
   </footer>
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/static/service-worker.js');
-      });
-    }
-  </script>
 </body>
 </html>
