@@ -141,3 +141,24 @@ def browser_accetta_cookie():
         if not (k.count('.') == 3 and all(part.isdigit() for part in k.split('.'))):
             return True
     return False 
+
+def filtra_utenti_doppi(utenti):
+    # utenti: lista di tuple (identificatore, ip, so, browser, device, modello)
+    chiavi = set()
+    ip_usati = set()
+    filtrati = []
+    for u in utenti:
+        ident, ip, *_ = u
+        # Se la chiave non è un IP, segna la chiave e l'IP associato
+        if not (ident.count('.') == 3 and all(part.isdigit() for part in ident.split('.'))):
+            chiavi.add(ident)
+            ip_usati.add(ip)
+    for u in utenti:
+        ident, ip, *_ = u
+        # Se è una chiave, sempre ok
+        if not (ident.count('.') == 3 and all(part.isdigit() for part in ident.split('.'))):
+            filtrati.append(u)
+        # Se è un IP, solo se non c'è già una chiave per quell'IP
+        elif ip not in ip_usati:
+            filtrati.append(u)
+    return filtrati 
