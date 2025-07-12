@@ -30,11 +30,10 @@
       {% endfor %}
     </tbody>
   </table>
-  <button onclick="document.getElementById('storico-accessi').classList.toggle('hidden')"
-          style="margin:1em 0 0.5em 0;">Mostra/Nascondi storico accessi</button>
-  <div id="storico-accessi" class="hidden" style="background:#111;padding:1em;border-radius:10px;margin-bottom:1em;">
-    <b>Utenti unici ultime 24h:</b> {{ accessi_24h }}<br>
-    <b>Utenti unici totali:</b> {{ accessi_totali }}
+  <div id="storico-accessi" style="background:#111;padding:1.2em 1em 1em 1em;border-radius:12px;margin:1.5em 0 2em 0;box-shadow:0 2px 12px #00ff6a33;border:2px solid #00ff6a;max-width:420px;">
+    <h3 style="color:#00ff6a;margin-bottom:0.5em;">Storico accessi utenti</h3>
+    <div style="font-size:1.15em;color:#fff;"><b>Utenti unici ultime 24h:</b> {{ accessi_24h }}</div>
+    <div style="font-size:1.15em;color:#fff;"><b>Utenti unici totali:</b> {{ accessi_totali }}</div>
   </div>
   <style>
     .hidden { display: none; }
