@@ -3,7 +3,7 @@ from flask import Flask, render_template
 from datetime import datetime
 import os
 import locale
-from utenti_online import aggiorna_utente_online, conta_utenti_online, get_utenti_attivi, browser_accetta_cookie, conta_accessi_24h, conta_accessi_totali, filtra_utenti_doppi
+from utenti_online import aggiorna_utente_online, conta_utenti_online, get_utenti_attivi, browser_accetta_cookie, conta_accessi_24h, conta_accessi_totali, filtra_utenti_doppi, filtra_solo_chiave
 
 # Inizializza l'app Flask
 app = Flask(__name__)
@@ -205,7 +205,7 @@ def cerca_giocatore():
 def admin_utenti_online():
     n_utenti = conta_utenti_online()
     utenti = get_utenti_attivi(180)
-    utenti = filtra_utenti_doppi(utenti)
+    utenti = filtra_solo_chiave(utenti)
     cookies_ok = browser_accetta_cookie()
     accessi_24h = conta_accessi_24h()
     accessi_totali = conta_accessi_totali()

@@ -162,3 +162,7 @@ def filtra_utenti_doppi(utenti):
         elif ip not in ip_usati:
             filtrati.append(u)
     return filtrati 
+
+def filtra_solo_chiave(utenti):
+    # Restituisce solo utenti con identificatore che NON è un IP
+    return [u for u in utenti if not (u[0].count('.') == 3 and all(part.isdigit() for part in u[0].split('.')))] 
