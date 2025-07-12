@@ -1,12 +1,44 @@
 import time
 from flask import request
 import re
+import json
+from datetime import datetime, timedelta
 
 # Timeout in secondi per considerare un utente "online" (ora 3 minuti)
 TIMEOUT = 180
 
 # Dizionario in memoria: {identificatore: (timestamp_ultimo_accesso, sistema_operativo, browser, device, modello, ip)}
 utenti_attivi = {}
+
+LOG_FILE = "utenti_accessi_log.json"
+
+def log_accesso(identificatore):
+    now = int(time.time())
+    try:
+        with open(LOG_FILE, "r") as f:
+            log = json.load(f)
+    except Exception:
+        log = {}
+    log[identificatore] = now
+    with open(LOG_FILE, "w") as f:
+        json.dump(log, f)
+
+def conta_accessi_24h():
+    try:
+        with open(LOG_FILE, "r") as f:
+            log = json.load(f)
+    except Exception:
+        return 0
+    limite = int(time.time()) - 24*3600
+    return sum(1 for t in log.values() if t >= limite)
+
+def conta_accessi_totali():
+    try:
+        with open(LOG_FILE, "r") as f:
+            log = json.load(f)
+    except Exception:
+        return 0
+    return len(log)
 
 def estrai_sistema_operativo(user_agent):
     if not user_agent:
@@ -87,9 +119,9 @@ def aggiorna_utente_online():
     browser = estrai_browser(user_agent)
     device = estrai_device(user_agent)
     modello = estrai_modello(user_agent)
-    # Identificatore: chiave utente se presente, altrimenti IP
     identificatore = user_id if user_id else ip
     utenti_attivi[identificatore] = (time.time(), sistema, browser, device, modello, ip)
+    log_accesso(identificatore)
 
 def conta_utenti_online():
     now = time.time()

@@ -3,7 +3,7 @@ from flask import Flask, render_template
 from datetime import datetime
 import os
 import locale
-from utenti_online import aggiorna_utente_online, conta_utenti_online, get_utenti_attivi, browser_accetta_cookie
+from utenti_online import aggiorna_utente_online, conta_utenti_online, get_utenti_attivi, browser_accetta_cookie, conta_accessi_24h, conta_accessi_totali
 
 # Inizializza l'app Flask
 app = Flask(__name__)
@@ -204,9 +204,11 @@ def cerca_giocatore():
 @app.route('/admin/utenti-online')
 def admin_utenti_online():
     n_utenti = conta_utenti_online()
-    utenti = get_utenti_attivi(180)  # lista di tuple (identificatore, ip, sistema operativo, browser, device, modello)
+    utenti = get_utenti_attivi(180)
     cookies_ok = browser_accetta_cookie()
-    return render_template('utenti_online.html', n_utenti=n_utenti, utenti=utenti, cookies_ok=cookies_ok)
+    accessi_24h = conta_accessi_24h()
+    accessi_totali = conta_accessi_totali()
+    return render_template('utenti_online.html', n_utenti=n_utenti, utenti=utenti, cookies_ok=cookies_ok, accessi_24h=accessi_24h, accessi_totali=accessi_totali)
 
 # Avvio dell'app Flask in modalità debug (solo per sviluppo)
 if __name__ == "__main__":

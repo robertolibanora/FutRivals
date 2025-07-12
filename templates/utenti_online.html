@@ -30,6 +30,15 @@
       {% endfor %}
     </tbody>
   </table>
+  <button onclick="document.getElementById('storico-accessi').classList.toggle('hidden')"
+          style="margin:1em 0 0.5em 0;">Mostra/Nascondi storico accessi</button>
+  <div id="storico-accessi" class="hidden" style="background:#111;padding:1em;border-radius:10px;margin-bottom:1em;">
+    <b>Utenti unici ultime 24h:</b> {{ accessi_24h }}<br>
+    <b>Utenti unici totali:</b> {{ accessi_totali }}
+  </div>
+  <style>
+    .hidden { display: none; }
+  </style>
   <div style="margin-top:2em;text-align:left;color:#888;font-size:1.03em;max-width:700px;">
     <b>Legenda:</b><br>
     <span style="color:#ffd700;font-weight:bold;">Chiave utente</span>: identificatore anonimo e persistente (cookie, cambia solo se si cancellano i cookie o si cambia browser/dispositivo).<br>
