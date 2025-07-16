@@ -1,1 +1,1 @@
-git add . && git commit -m "AggiustasquadreNoOMAR" && git push
+git add . && git commit -m "Fine1" git push
