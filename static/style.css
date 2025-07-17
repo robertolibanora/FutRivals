@@ -812,3 +812,142 @@ h1, h2, h3 {
   padding-left: 0.7em;
   padding-right: 0.7em;
 }
+
+/* Fuochi d'artificio CSS per la card vincitore */
+.fireworks-css {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 180px;
+  height: 180px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fireworks-css .fw {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #00ff6a 60%, transparent 100%);
+  opacity: 0.7;
+  pointer-events: none;
+  filter: blur(2px) brightness(1.5) drop-shadow(0 0 16px #00ff6a);
+  animation: fw-burst 1.8s linear infinite;
+}
+.fireworks-css .fw1 {
+  width: 60px; height: 60px;
+  animation-delay: 0s;
+}
+.fireworks-css .fw2 {
+  width: 90px; height: 90px;
+  animation-delay: 0.4s;
+  opacity: 0.5;
+}
+.fireworks-css .fw3 {
+  width: 120px; height: 120px;
+  animation-delay: 0.8s;
+  opacity: 0.35;
+}
+.fireworks-css .fw4 {
+  width: 150px; height: 150px;
+  animation-delay: 1.2s;
+  opacity: 0.22;
+}
+@keyframes fw-burst {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Fuochi d'artificio CSS realistici con tanti pallini neon */
+#winner-card .firework,
+#winner-card .firework::before,
+#winner-card .firework::after {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  width: 0.5vmin;
+  aspect-ratio: 1;
+  background:
+    radial-gradient(circle, #00ff6a 0.5vmin, #0000 0) 50% 0%,
+    radial-gradient(circle, #bfff00 0.5vmin, #0000 0) 100% 50%,
+    radial-gradient(circle, #fff 0.5vmin, #0000 0) 50% 100%,
+    radial-gradient(circle, #00ffea 0.5vmin, #0000 0) 0% 50%,
+    radial-gradient(circle, #bfff00 0.5vmin, #0000 0) 80% 90%,
+    radial-gradient(circle, #00ff6a 0.5vmin, #0000 0) 10% 80%,
+    radial-gradient(circle, #00ff6a 0.5vmin, #0000 0) 20% 20%,
+    radial-gradient(circle, #bfff00 0.5vmin, #0000 0) 80% 20%,
+    radial-gradient(circle, #fff 0.5vmin, #0000 0) 20% 80%,
+    radial-gradient(circle, #00ffea 0.5vmin, #0000 0) 80% 80%;
+  background-size: 0.5vmin 0.5vmin;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  animation: firework 2.2s infinite;
+  content: '';
+}
+#winner-card .firework::before {
+  content: '';
+  transform: translate(-50%, -50%) rotate(25deg) scale(1.1);
+  animation-delay: 0.7s;
+}
+#winner-card .firework::after {
+  content: '';
+  transform: translate(-50%, -50%) rotate(-37deg) scale(1.2);
+  animation-delay: 1.1s;
+}
+#winner-card .firework:nth-child(1) { animation-delay: 0s; }
+#winner-card .firework:nth-child(2) { animation-delay: 0.3s; transform: translate(-50%, -50%) rotate(15deg); }
+#winner-card .firework:nth-child(3) { animation-delay: 0.6s; transform: translate(-50%, -50%) rotate(30deg); }
+#winner-card .firework:nth-child(4) { animation-delay: 0.9s; transform: translate(-50%, -50%) rotate(45deg); }
+#winner-card .firework:nth-child(5) { animation-delay: 1.2s; transform: translate(-50%, -50%) rotate(60deg); }
+#winner-card .firework:nth-child(6) { animation-delay: 1.5s; transform: translate(-50%, -50%) rotate(75deg); }
+#winner-card .firework:nth-child(7) { animation-delay: 1.8s; transform: translate(-50%, -50%) rotate(90deg); }
+#winner-card .firework:nth-child(8) { animation-delay: 2.1s; transform: translate(-50%, -50%) rotate(105deg); }
+#winner-card .firework:nth-child(9) { animation-delay: 2.4s; transform: translate(-50%, -50%) rotate(120deg); }
+#winner-card .firework:nth-child(10) { animation-delay: 2.7s; transform: translate(-50%, -50%) rotate(135deg); }
+@keyframes firework {
+  0% { transform: translate(-50%, 60vmin); width: 0.5vmin; opacity: 1; }
+  50% { width: 0.5vmin; opacity: 1; }
+  100% { width: 45vmin; opacity: 0; }
+}
+
+.fireworks-burst {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 140px;
+  height: 140px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 1;
+}
+.burst-ray {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 60px;
+  background: linear-gradient(to top, #00ff6a 60%, transparent 100%);
+  border-radius: 8px;
+  box-shadow: 0 0 16px #00ff6a99, 0 0 8px #00ff6a;
+  opacity: 0.85;
+  transform-origin: 50% 90%;
+  animation: burst-ray-anim 1.2s cubic-bezier(.7,0,.7,1) infinite;
+}
+.ray1 { transform: rotate(0deg);   animation-delay: 0s; }
+.ray2 { transform: rotate(45deg);  animation-delay: 0.15s; }
+.ray3 { transform: rotate(90deg);  animation-delay: 0.3s; }
+.ray4 { transform: rotate(135deg); animation-delay: 0.45s; }
+.ray5 { transform: rotate(180deg); animation-delay: 0.6s; }
+.ray6 { transform: rotate(225deg); animation-delay: 0.75s; }
+.ray7 { transform: rotate(270deg); animation-delay: 0.9s; }
+.ray8 { transform: rotate(315deg); animation-delay: 1.05s; }
+@keyframes burst-ray-anim {
+  0%   { height: 0px; opacity: 1; filter: blur(0) brightness(2); }
+  60%  { height: 60px; opacity: 0.85; filter: blur(1.5px) brightness(2.5); }
+  100% { height: 80px; opacity: 0; filter: blur(3px) brightness(1.2); }
+}

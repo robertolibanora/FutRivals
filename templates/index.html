@@ -24,36 +24,94 @@
 </script>
 <section class="hero">
     <h1>FUT RIVALS TOURNAMENT</h1>
-    <div class="card">
+    {% if winner %}
+    <!-- Card vincitore: stessa larghezza e centratura della card finale -->
+    <div class="card match-card" id="winner-card" style="margin-bottom: 1.5em; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.7em; position: relative; min-height:320px; padding-top:2.5em; padding-bottom:2.5em; overflow: hidden;">
+        <div class="firework"></div>
+        <div class="firework"></div>
+        <div class="firework"></div>
+        <div class="firework"></div>
+        <div class="firework"></div>
+        <div class="firework"></div>
+        <div class="firework"></div>
+        <div class="firework"></div>
+        <div class="firework"></div>
+        <div class="firework"></div>
+        <div style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;z-index:2;">
+            <img src="{{ url_for('static', filename='squadre/' + winner.logo) }}" alt="Logo {{ winner.nome }}" style="height:100px;width:100px;z-index:2;border-radius:50%;background:#222;border:3px solid #00ff6a;box-shadow:0 0 16px #00ff6a99;object-fit:cover;position:relative;">
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2;gap:0.7em;">
+          <span style="color:#00ff6a; text-shadow:0 0 12px #00ff6a, 0 0 24px #00ff6a; font-size:1.5em; font-weight:700;">Vincitori:</span>
+          <span style="color:#00ff6a; text-shadow:0 0 12px #00ff6a, 0 0 24px #00ff6a; font-size:2.2em; font-weight:900; margin-top:0.2em;">{{ winner.nome }}</span>
+        </div>
+    </div>
+    {% endif %}
+    <div class="card match-card" style="background: var(--futrivals-gray); color: var(--futrivals-white); display:flex; flex-direction:column; align-items:center; gap:0.7em;">
     {% if next_match %}
-        <h2>Prossima Partita</h2>
-        <div class="match-info team-logos-flex" style="flex-direction:column;align-items:center;gap:1.2em;">
-            <div class="team home" style="font-size:1.25em;">{{ next_match.squadra_casa }}</div>
-            <div class="logo">
-                <img class="team-logo-big" src="{{ url_for('static', filename='squadre/' + next_match.logo_casa) }}" alt="{{ next_match.squadra_casa }}">
-            </div>
-            <div class="vs vs-neon">VS</div>
-            <div class="logo">
-                <img class="team-logo-big" src="{{ url_for('static', filename='squadre/' + next_match.logo_trasferta) }}" alt="{{ next_match.squadra_trasferta }}">
-            </div>
-            <div class="team away" style="font-size:1.25em;">{{ next_match.squadra_trasferta }}</div>
-        </div>
-        <div class="match-details">
-            <p class="date">{{ next_match.data }}</p>
-            <p class="time">{{ next_match.ora[:5] }}</p>
-            <p class="stadium">{{ next_match.stadio }}</p>
-            {% if next_match.tipo_partita %}
-              <p class="tipo-partita">{{ next_match.tipo_partita }}</p>
-            {% endif %}
+        <h2 style="color:#00ff6a; text-shadow:0 0 8px #00ff6a; margin-bottom:0.5em;">FINALE</h2>
+        <div class="teams" style="display:flex;align-items:center;justify-content:center;gap:1.2em;width:100%;">
+          <div style="text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;width:40%;">
+            <img class="team-logo-big" src="{{ url_for('static', filename='squadre/' + next_match.logo_casa) }}" alt="{{ next_match.squadra_casa }}" style="margin-bottom:0.2em;">
+            <div style="font-weight:bold;font-size:1.1em;">{{ next_match.squadra_casa }}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.2em;">
+            <div class="vs vs-neon" style="align-self:center;">VS</div>
             {% if next_match.risultato and next_match.risultato != '-' %}
-              <p class="score">{{ next_match.risultato }}</p>
+              {% set score_home = next_match.risultato.split('-')[0]|trim %}
+              {% set score_away = next_match.risultato.split('-')[1]|trim %}
+              {% set home_win = score_home|int > score_away|int %}
+              {% set away_win = score_away|int > score_home|int %}
+              <div style="display:flex;gap:0.3em;align-items:center;justify-content:center;">
+                <span class="score score-big-vs vs vs-neon" style="font-size:1.5rem; font-weight:900; text-align:center; margin-top:0.1em; color:{% if home_win %}var(--futrivals-green){% elif away_win %}var(--futrivals-red, #ff2b2b){% else %}var(--futrivals-gold){% endif %}; text-shadow:0 0 8px {% if home_win %}#00ff6a{% elif away_win %}#ff2b2b{% else %}#ffd700{% endif %};">{{ score_home }}</span>
+                <span style="font-size:1.5rem; font-weight:900; color:var(--futrivals-white);">-</span>
+                <span class="score score-big-vs vs vs-neon" style="font-size:1.5rem; font-weight:900; text-align:center; margin-top:0.1em; color:{% if away_win %}var(--futrivals-green){% elif home_win %}var(--futrivals-red, #ff2b2b){% else %}var(--futrivals-gold){% endif %}; text-shadow:0 0 8px {% if away_win %}#00ff6a{% elif home_win %}#ff2b2b{% else %}#ffd700{% endif %};">{{ score_away }}</span>
+              </div>
             {% endif %}
+          </div>
+          <div style="text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;width:40%;">
+            <img class="team-logo-big" src="{{ url_for('static', filename='squadre/' + next_match.logo_trasferta) }}" alt="{{ next_match.squadra_trasferta }}" style="margin-bottom:0.2em;">
+            <div style="font-weight:bold;font-size:1.1em;">{{ next_match.squadra_trasferta }}</div>
+          </div>
         </div>
+        <div class="date-time" style="font-size:0.98rem; margin:0.2rem 0;">{{ next_match.data }} - {{ next_match.ora[:5] }}</div>
+        <div class="stadium" style="font-size:0.92rem;">{{ next_match.stadio }}</div>
+        {% if next_match.tipo_partita %}
+          <div class="tipo-partita" style="font-size:0.92rem; font-weight:600; margin-top:0.1rem;">{{ next_match.tipo_partita }}</div>
+        {% endif %}
     {% else %}
         <h2>Nessuna partita programmata</h2>
     {% endif %}
     </div>
 </section>
+
+{% if winner %}
+<script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.10.3/dist/fireworks.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('fireworks-winner');
+    if (container) {
+      const fireworks = new Fireworks.default(container, {
+        hue: { min: 110, max: 140 },
+        delay: { min: 2, max: 8 }, // esplosioni molto frequenti
+        speed: 2.2,
+        acceleration: 1.04,
+        friction: 0.97,
+        gravity: 1.05,
+        particles: 70,
+        trace: 7,
+        explosion: 10,
+        autoresize: true,
+        brightness: { min: 80, max: 100 },
+        decay: { min: 0.012, max: 0.025 },
+        mouse: { click: false, move: false, max: 0 },
+        boundaries: { x: 0, y: 0, width: container.offsetWidth, height: container.offsetHeight },
+        sound: { enabled: false }
+      });
+      fireworks.start();
+    }
+  });
+</script>
+{% endif %}
 
 <section class="top-scorers">
     <div class="card">
