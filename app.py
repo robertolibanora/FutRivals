@@ -157,6 +157,24 @@ def get_top_scorers():
         print(f"Errore nel calcolo dei top cannonieri: {e}")
         return []
 
+# Funzione per ottenere la squadra vincitrice della finale dal nuovo foglio Excel
+
+def get_winner_from_excel():
+    try:
+        # Sostituisci 'Finale' con il nome esatto del foglio che hai creato
+        df = pd.read_excel('DATITORNEO.xlsx', sheet_name='Finale', engine='openpyxl')
+        # Si assume che il foglio abbia colonne: 'Squadra', 'Logo', 'Vincitore' (booleano o testo)
+        winner_row = df[df['Vincitore'] == 1].iloc[0] if not df[df['Vincitore'] == 1].empty else None
+        if winner_row is not None:
+            return {
+                'nome': winner_row['Squadra'],
+                'logo': winner_row['Logo']
+            }
+        return None
+    except Exception as e:
+        print(f"Errore nella lettura del vincitore: {e}")
+        return None
+
 # ROUTES FLASK
 # Homepage: mostra la prossima partita
 @app.route('/')
@@ -164,7 +182,8 @@ def index():
     aggiorna_utente_online()
     next_match = get_next_match()
     top_scorers = get_top_scorers()
-    return render_template('index.html', next_match=next_match, top_scorers=top_scorers)
+    winner = get_winner_from_excel()
+    return render_template('index.html', next_match=next_match, top_scorers=top_scorers, winner=winner)
 
 # Pagina rose: mostra le rose delle squadre
 @app.route('/rose')
