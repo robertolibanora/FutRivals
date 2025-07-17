@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Area Admin – Fut Rivals</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body style="background:#101010;color:#fff;">
+  <div class="card" style="max-width:480px;margin:2em auto 0 auto;">
+    <h1 style="color:#00ff6a;text-align:center;">Area Admin</h1>
+    {% if login %}
+      <form method="post" style="margin-bottom:1.5em;">
+        <label for="username">Username:</label><br>
+        <input type="text" name="username" id="username" required style="margin-bottom:0.7em;width:100%;"><br>
+        <label for="password">Password:</label><br>
+        <input type="password" name="password" id="password" required style="margin-bottom:0.7em;width:100%;"><br>
+        <button type="submit" class="btn-main">Accedi</button>
+      </form>
+      {% if message %}<p style="color:#ff2b2b;text-align:center;font-weight:bold;">{{ message }}</p>{% endif %}
+    {% else %}
+      <h2 style="color:#ffd700;">Upload nuovo file Excel</h2>
+      <form method="post" enctype="multipart/form-data" style="margin-bottom:1.5em;">
+        <input type="file" name="excel_file" accept=".xlsx" required style="margin-bottom:0.7em;">
+        <button type="submit" class="btn-main">Carica</button>
+      </form>
+      {% if message %}
+        <p style="color:#00ff6a;text-align:center;font-weight:bold;">{{ message }}</p>
+      {% endif %}
+      <hr style="margin:2em 0;">
+      <h2 style="color:#ffd700;">Accessi recenti</h2>
+      <div style="margin-bottom:1em;color:#00ff6a;font-weight:bold;">Utenti attivi ora: {{ n_utenti }}<br>Unici 24h: {{ accessi_24h }}<br>Unici totali: {{ accessi_totali }}</div>
+      <table style="width:100%;margin-top:1em;background:#181818;border-radius:0;box-shadow:none;border:2px solid #00ff6a;font-size:1.08em;">
+        <thead>
+          <tr style="background:#101010;color:#00ff6a;font-weight:bold;">
+            <th style="padding:0.7em 0.2em;">Chiave utente<br><span style='font-size:0.85em;color:#ffd700;'>(anonima)</span></th>
+            <th style="padding:0.7em 0.2em;">Indirizzo IP</th>
+            <th style="padding:0.7em 0.2em;">Sistema operativo</th>
+            <th style="padding:0.7em 0.2em;">Browser</th>
+            <th style="padding:0.7em 0.2em;">Dispositivo</th>
+            <th style="padding:0.7em 0.2em;">Modello</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for uid, ip, so, br, dev, mod in utenti %}
+            <tr style="background: {% if loop.index0 % 2 == 0 %}#222{% else %}#181818{% endif %};">
+              <td style="padding:0.6em 0.2em;color:#fff;font-weight:bold;font-size:1.15em;">{{ uid }}</td>
+              <td style="padding:0.6em 0.2em;color:#fff;">{{ ip }}</td>
+              <td style="padding:0.6em 0.2em;color:#00ff6a;">{{ so }}</td>
+              <td style="padding:0.6em 0.2em;color:#ffd700;">{{ br }}</td>
+              <td style="padding:0.6em 0.2em;color:#00bfff;">{{ dev }}</td>
+              <td style="padding:0.6em 0.2em;color:#fff;">{{ mod }}</td>
+            </tr>
+          {% else %}
+            <tr><td colspan="6" style="color:#888;padding:1.2em;font-size:1.1em;">Nessun utente attivo negli ultimi 3 minuti.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  </div>
+</body>
+</html> 
