@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin – Fut Rivals</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    * { box-sizing: border-box; }
+    .admin-container {
+      max-width: 1400px;
+      margin: 1em auto;
+      padding: 1em;
+    }
+    .header-admin {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2em;
+      padding-bottom: 1em;
+      border-bottom: 2px solid var(--futrivals-green, #00ff6a);
+      flex-wrap: wrap;
+      gap: 1em;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1em;
+      margin-bottom: 2em;
+    }
+    .stat-card {
+      background: var(--futrivals-gray, #181818);
+      border: 2px solid var(--futrivals-green, #00ff6a);
+      border-radius: 10px;
+      padding: 1em;
+      text-align: center;
+    }
+    .stat-card h3 {
+      color: var(--futrivals-gold, #ffd700);
+      margin: 0 0 0.5em 0;
+      font-size: 0.9em;
+    }
+    .stat-card .value {
+      color: var(--futrivals-green, #00ff6a);
+      font-size: 2em;
+      font-weight: bold;
+    }
+    .tabs {
+      display: flex;
+      gap: 0.5em;
+      margin-bottom: 2em;
+      flex-wrap: wrap;
+      border-bottom: 2px solid #333;
+    }
+    .tab {
+      padding: 0.8em 1.5em;
+      background: transparent;
+      border: none;
+      color: #888;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: bold;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+    }
+    .tab:hover {
+      color: var(--futrivals-green, #00ff6a);
+    }
+    .tab.active {
+      color: var(--futrivals-green, #00ff6a);
+      border-bottom-color: var(--futrivals-green, #00ff6a);
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .admin-section {
+      background: var(--futrivals-gray, #181818);
+      border: 2px solid var(--futrivals-green, #00ff6a);
+      border-radius: 10px;
+      padding: 1.5em;
+      margin-bottom: 2em;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5em;
+      flex-wrap: wrap;
+      gap: 1em;
+    }
+    .section-header h2 {
+      color: var(--futrivals-green, #00ff6a);
+      margin: 0;
+    }
+    .btn-admin {
+      background: var(--futrivals-green, #00ff6a);
+      color: #000;
+      border: none;
+      padding: 0.6em 1.2em;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.95em;
+      transition: all 0.3s;
+    }
+    .btn-admin:hover {
+      background: var(--futrivals-gold, #ffd700);
+      transform: translateY(-2px);
+    }
+    .btn-danger {
+      background: #ff2b2b;
+      color: #fff;
+    }
+    .btn-danger:hover {
+      background: #cc0000;
+    }
+    .btn-small {
+      padding: 0.4em 0.8em;
+      font-size: 0.85em;
+    }
+    .search-box {
+      width: 100%;
+      max-width: 400px;
+      padding: 0.7em;
+      border: 2px solid var(--futrivals-green, #00ff6a);
+      border-radius: 5px;
+      background: #222;
+      color: #fff;
+      font-size: 1em;
+    }
+    .form-group {
+      margin-bottom: 1em;
+    }
+    .form-group label {
+      display: block;
+      color: var(--futrivals-white, #fff);
+      margin-bottom: 0.5em;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.7em;
+      border: 2px solid var(--futrivals-green, #00ff6a);
+      border-radius: 5px;
+      background: #222;
+      color: #fff;
+      font-size: 1em;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1em;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1em;
+      font-size: 0.9em;
+    }
+    table th,
+    table td {
+      padding: 0.7em;
+      text-align: left;
+      border: 1px solid #333;
+    }
+    table th {
+      background: #101010;
+      color: var(--futrivals-green, #00ff6a);
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+    }
+    table tr:nth-child(even) {
+      background: #222;
+    }
+    table tr:hover {
+      background: #2a2a2a;
+    }
+    .score-input {
+      width: 60px;
+      text-align: center;
+      font-size: 1.1em;
+      font-weight: bold;
+      padding: 0.4em;
+    }
+    .goal-input {
+      width: 80px;
+      text-align: center;
+      padding: 0.4em;
+    }
+    .message {
+      padding: 1em;
+      border-radius: 5px;
+      margin: 1em 0;
+      text-align: center;
+      font-weight: bold;
+      animation: slideIn 0.3s;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .message.success {
+      background: #00ff6a;
+      color: #000;
+    }
+    .message.error {
+      background: #ff2b2b;
+      color: #fff;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      overflow-y: auto;
+    }
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2em;
+    }
+    .modal-content {
+      background: #181818;
+      border: 2px solid var(--futrivals-green, #00ff6a);
+      border-radius: 10px;
+      padding: 2em;
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5em;
+    }
+    .modal-header h3 {
+      color: var(--futrivals-green, #00ff6a);
+      margin: 0;
+    }
+    .close-modal {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 2em;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+    }
+    .close-modal:hover {
+      color: var(--futrivals-green, #00ff6a);
+    }
+    .inline-form {
+      display: flex;
+      gap: 0.5em;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.2em 0.6em;
+      border-radius: 12px;
+      font-size: 0.8em;
+      font-weight: bold;
+    }
+    .badge-success {
+      background: #00ff6a;
+      color: #000;
+    }
+    .badge-warning {
+      background: #ffd700;
+      color: #000;
+    }
+    .badge-info {
+      background: #00bfff;
+      color: #fff;
+    }
+    @media (max-width: 768px) {
+      .admin-container { padding: 0.5em; }
+      .form-row { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      table { font-size: 0.8em; }
+      table th, table td { padding: 0.5em; }
+      .modal-content { padding: 1em; margin: 1em; }
+      .tabs { overflow-x: auto; }
+    }
+  </style>
+</head>
+<body style="background:#101010;color:#fff;">
+  <div class="admin-container">
+    <div class="header-admin">
+      <h1 style="color:var(--futrivals-green, #00ff6a);margin:0;">⚽ Dashboard Admin</h1>
+      <div>
+        <a href="{{ url_for('main.index') }}" class="btn-admin" style="margin-right:0.5em;">Vai al Sito</a>
+        <a href="{{ url_for('admin.utenti_online') }}" class="btn-admin" style="margin-right:0.5em;">📊 Statistiche</a>
+        <a href="{{ url_for('admin.admin_logout') }}" class="btn-admin btn-danger">Logout</a>
+      </div>
+    </div>
+
+    <div id="message-container"></div>
+
+    <!-- Statistiche Rapide -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>📅 Partite Totali</h3>
+        <div class="value">{{ stats.totale_partite }}</div>
+      </div>
+      <div class="stat-card">
+        <h3>✅ Giocate</h3>
+        <div class="value">{{ stats.partite_giocate }}</div>
+      </div>
+      <div class="stat-card">
+        <h3>⏳ Da Giocare</h3>
+        <div class="value">{{ stats.partite_da_giocare }}</div>
+      </div>
+      <div class="stat-card">
+        <h3>👥 Squadre</h3>
+        <div class="value">{{ stats.totale_squadre }}</div>
+      </div>
+      <div class="stat-card">
+        <h3>⚽ Giocatori</h3>
+        <div class="value">{{ stats.totale_giocatori }}</div>
+      </div>
+      <div class="stat-card">
+        <h3>🎯 Goal Totali</h3>
+        <div class="value">{{ stats.totale_goal }}</div>
+      </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('partite')">📅 Partite</button>
+      <button class="tab" onclick="showTab('giocatori')">⚽ Giocatori</button>
+      <button class="tab" onclick="showTab('squadre')">👥 Squadre</button>
+      <button class="tab" onclick="showTab('vincitore')">🏆 Vincitore</button>
+    </div>
+
+    <!-- TAB PARTITE -->
+    <div id="tab-partite" class="tab-content active">
+      <div class="admin-section">
+        <div class="section-header">
+          <h2>📅 Gestione Partite</h2>
+          <button class="btn-admin" onclick="openModal('modal-add-partita')">➕ Aggiungi Partita</button>
+        </div>
+        
+        <input type="text" class="search-box" id="search-partite" placeholder="🔍 Cerca partite..." onkeyup="filterTable('partite-table', this.value)">
+
+        <div style="overflow-x:auto;">
+          <table id="partite-table">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Ora</th>
+                <th>Squadra Casa</th>
+                <th>Risultato</th>
+                <th>Squadra Trasferta</th>
+                <th>Stadio</th>
+                <th>Azioni</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for partita in partite %}
+              <tr>
+                <td>{{ partita.data }}</td>
+                <td>{{ partita.ora }}</td>
+                <td>{{ partita.squadra_casa }}</td>
+                <td>
+                  <form class="inline-form" onsubmit="updatePartita(event, {{ partita.id }})">
+                    <input type="number" class="score-input" name="risultato_casa" 
+                           value="{{ partita.risultato_casa or '' }}" min="0" placeholder="0">
+                    <span>-</span>
+                    <input type="number" class="score-input" name="risultato_trasferta" 
+                           value="{{ partita.risultato_trasferta or '' }}" min="0" placeholder="0">
+                    <button type="submit" class="btn-admin btn-small">💾</button>
+                  </form>
+                </td>
+                <td>{{ partita.squadra_trasferta }}</td>
+                <td>{{ partita.stadio }}</td>
+                <td>
+                  <button onclick="deletePartita({{ partita.id }})" class="btn-admin btn-danger btn-small">🗑️</button>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB GIOCATORI -->
+    <div id="tab-giocatori" class="tab-content">
+      <div class="admin-section">
+        <div class="section-header">
+          <h2>⚽ Gestione Giocatori</h2>
+          <button class="btn-admin" onclick="openModal('modal-add-giocatore')">➕ Aggiungi Giocatore</button>
+        </div>
+        
+        <input type="text" class="search-box" id="search-giocatori" placeholder="🔍 Cerca giocatori..." onkeyup="filterTable('giocatori-table', this.value)">
+
+        <div style="overflow-x:auto;">
+          <table id="giocatori-table">
+            <thead>
+              <tr>
+                <th>Giocatore</th>
+                <th>Squadra</th>
+                <th>Goal</th>
+                <th>Azioni</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for giocatore in giocatori %}
+              <tr>
+                <td>{{ giocatore.nome }}</td>
+                <td>{{ giocatore.squadra }}</td>
+                <td>
+                  <form class="inline-form" onsubmit="updateGiocatoreGoal(event, {{ giocatore.id }})">
+                    <input type="number" class="goal-input" name="goal" 
+                           value="{{ giocatore.goal or 0 }}" min="0" required>
+                    <button type="submit" class="btn-admin btn-small">💾</button>
+                  </form>
+                </td>
+                <td>
+                  <button onclick="editGiocatore({{ giocatore.id }}, '{{ giocatore.nome }}', {{ giocatore.squadra_id }}, {{ giocatore.goal }})" 
+                          class="btn-admin btn-small" style="margin-right:0.3em;">✏️</button>
+                  <button onclick="deleteGiocatore({{ giocatore.id }})" class="btn-admin btn-danger btn-small">🗑️</button>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB SQUADRE -->
+    <div id="tab-squadre" class="tab-content">
+      <div class="admin-section">
+        <div class="section-header">
+          <h2>👥 Gestione Squadre</h2>
+          <button class="btn-admin" onclick="openModal('modal-add-squadra')">➕ Aggiungi Squadra</button>
+        </div>
+        
+        <input type="text" class="search-box" id="search-squadre" placeholder="🔍 Cerca squadre..." onkeyup="filterTable('squadre-table', this.value)">
+
+        <div style="overflow-x:auto;">
+          <table id="squadre-table">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Logo</th>
+                <th>Girone</th>
+                <th>Punti</th>
+                <th>Azioni</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for squadra in squadre %}
+              <tr>
+                <td>{{ squadra.nome }}</td>
+                <td>{{ squadra.logo }}</td>
+                <td>{{ squadra.girone or '-' }}</td>
+                <td><span class="badge badge-success">{{ squadra.punti }}</span></td>
+                <td>
+                  <button onclick="editSquadra({{ squadra.id }}, '{{ squadra.nome }}', '{{ squadra.logo }}', '{{ squadra.girone or '' }}')" 
+                          class="btn-admin btn-small" style="margin-right:0.3em;">✏️</button>
+                  <button onclick="deleteSquadra({{ squadra.id }})" class="btn-admin btn-danger btn-small">🗑️</button>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB VINCITORE -->
+    <div id="tab-vincitore" class="tab-content">
+      <div class="admin-section">
+        <h2>🏆 Vincitore Finale</h2>
+        {% if vincitore %}
+        <div style="background:#222;padding:1.5em;border-radius:10px;margin-bottom:1.5em;text-align:center;">
+          <h3 style="color:var(--futrivals-gold, #ffd700);margin-top:0;">Vincitore Attuale</h3>
+          <p style="font-size:1.5em;color:var(--futrivals-green, #00ff6a);font-weight:bold;">{{ vincitore.nome }}</p>
+        </div>
+        {% else %}
+        <p style="color:#888;margin-bottom:1.5em;">Nessun vincitore impostato</p>
+        {% endif %}
+        <form onsubmit="setVincitore(event)">
+          <div class="form-group">
+            <label>Seleziona Squadra Vincitrice</label>
+            <select name="squadra_id" required>
+              <option value="">-- Seleziona squadra --</option>
+              {% for squadra in squadre %}
+              <option value="{{ squadra.id }}" {% if vincitore and vincitore.id == squadra.id %}selected{% endif %}>{{ squadra.nome }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="btn-admin">🏆 Imposta Vincitore</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL AGGIUNGI PARTITA -->
+  <div id="modal-add-partita" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>➕ Aggiungi Nuova Partita</h3>
+        <button class="close-modal" onclick="closeModal('modal-add-partita')">&times;</button>
+      </div>
+      <form id="form-add-partita" onsubmit="addPartita(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Data</label>
+            <input type="date" name="data" required>
+          </div>
+          <div class="form-group">
+            <label>Ora</label>
+            <input type="time" name="ora" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Squadra Casa</label>
+            <select name="squadra_casa_id" required>
+              <option value="">Seleziona squadra</option>
+              {% for squadra in squadre %}
+              <option value="{{ squadra.id }}">{{ squadra.nome }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Squadra Trasferta</label>
+            <select name="squadra_trasferta_id" required>
+              <option value="">Seleziona squadra</option>
+              {% for squadra in squadre %}
+              <option value="{{ squadra.id }}">{{ squadra.nome }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Stadio</label>
+            <input type="text" name="stadio" required>
+          </div>
+          <div class="form-group">
+            <label>Tipo Partita (opzionale)</label>
+            <input type="text" name="tipo_partita">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Girone (opzionale)</label>
+          <input type="text" name="girone">
+        </div>
+        <div style="display:flex;gap:1em;margin-top:1.5em;">
+          <button type="submit" class="btn-admin">✅ Aggiungi</button>
+          <button type="button" class="btn-admin btn-danger" onclick="closeModal('modal-add-partita')">Annulla</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL AGGIUNGI GIOCATORE -->
+  <div id="modal-add-giocatore" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>➕ Aggiungi Nuovo Giocatore</h3>
+        <button class="close-modal" onclick="closeModal('modal-add-giocatore')">&times;</button>
+      </div>
+      <form id="form-add-giocatore" onsubmit="addGiocatore(event)">
+        <div class="form-group">
+          <label>Nome Giocatore</label>
+          <input type="text" name="nome" required>
+        </div>
+        <div class="form-group">
+          <label>Squadra</label>
+          <select name="squadra_id" required>
+            <option value="">Seleziona squadra</option>
+            {% for squadra in squadre %}
+            <option value="{{ squadra.id }}">{{ squadra.nome }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Goal Iniziali</label>
+          <input type="number" name="goal" value="0" min="0">
+        </div>
+        <div style="display:flex;gap:1em;margin-top:1.5em;">
+          <button type="submit" class="btn-admin">✅ Aggiungi</button>
+          <button type="button" class="btn-admin btn-danger" onclick="closeModal('modal-add-giocatore')">Annulla</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL MODIFICA GIOCATORE -->
+  <div id="modal-edit-giocatore" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>✏️ Modifica Giocatore</h3>
+        <button class="close-modal" onclick="closeModal('modal-edit-giocatore')">&times;</button>
+      </div>
+      <form id="form-edit-giocatore" onsubmit="updateGiocatoreComplete(event)">
+        <input type="hidden" name="giocatore_id" id="edit-giocatore-id">
+        <div class="form-group">
+          <label>Nome Giocatore</label>
+          <input type="text" name="nome" id="edit-giocatore-nome" required>
+        </div>
+        <div class="form-group">
+          <label>Squadra</label>
+          <select name="squadra_id" id="edit-giocatore-squadra" required>
+            <option value="">Seleziona squadra</option>
+            {% for squadra in squadre %}
+            <option value="{{ squadra.id }}">{{ squadra.nome }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Goal</label>
+          <input type="number" name="goal" id="edit-giocatore-goal" min="0" required>
+        </div>
+        <div style="display:flex;gap:1em;margin-top:1.5em;">
+          <button type="submit" class="btn-admin">✅ Salva</button>
+          <button type="button" class="btn-admin btn-danger" onclick="closeModal('modal-edit-giocatore')">Annulla</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL AGGIUNGI SQUADRA -->
+  <div id="modal-add-squadra" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>➕ Aggiungi Nuova Squadra</h3>
+        <button class="close-modal" onclick="closeModal('modal-add-squadra')">&times;</button>
+      </div>
+      <form id="form-add-squadra" onsubmit="addSquadra(event)">
+        <div class="form-group">
+          <label>Nome Squadra</label>
+          <input type="text" name="nome" required>
+        </div>
+        <div class="form-group">
+          <label>Logo (nome file)</label>
+          <input type="text" name="logo" placeholder="es: squadra.png" required>
+        </div>
+        <div class="form-group">
+          <label>Girone (opzionale)</label>
+          <input type="text" name="girone" placeholder="es: Girone A">
+        </div>
+        <div style="display:flex;gap:1em;margin-top:1.5em;">
+          <button type="submit" class="btn-admin">✅ Aggiungi</button>
+          <button type="button" class="btn-admin btn-danger" onclick="closeModal('modal-add-squadra')">Annulla</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL MODIFICA SQUADRA -->
+  <div id="modal-edit-squadra" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>✏️ Modifica Squadra</h3>
+        <button class="close-modal" onclick="closeModal('modal-edit-squadra')">&times;</button>
+      </div>
+      <form id="form-edit-squadra" onsubmit="updateSquadraComplete(event)">
+        <input type="hidden" name="squadra_id" id="edit-squadra-id">
+        <div class="form-group">
+          <label>Nome Squadra</label>
+          <input type="text" name="nome" id="edit-squadra-nome" required>
+        </div>
+        <div class="form-group">
+          <label>Logo (nome file)</label>
+          <input type="text" name="logo" id="edit-squadra-logo" required>
+        </div>
+        <div class="form-group">
+          <label>Girone (opzionale)</label>
+          <input type="text" name="girone" id="edit-squadra-girone">
+        </div>
+        <div style="display:flex;gap:1em;margin-top:1.5em;">
+          <button type="submit" class="btn-admin">✅ Salva</button>
+          <button type="button" class="btn-admin btn-danger" onclick="closeModal('modal-edit-squadra')">Annulla</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Tab Navigation
+    function showTab(tabName) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+    }
+
+    // Modal Functions
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.add('active');
+    }
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('active');
+    }
+    window.onclick = function(event) {
+      if (event.target.classList.contains('modal')) {
+        event.target.classList.remove('active');
+      }
+    }
+
+    // Search/Filter
+    function filterTable(tableId, searchText) {
+      const table = document.getElementById(tableId);
+      const rows = table.getElementsByTagName('tr');
+      for (let i = 1; i < rows.length; i++) {
+        const text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(searchText.toLowerCase()) ? '' : 'none';
+      }
+    }
+
+    // Message Display
+    function showMessage(text, isError = false) {
+      const container = document.getElementById('message-container');
+      container.innerHTML = `<div class="message ${isError ? 'error' : 'success'}">${text}</div>`;
+      setTimeout(() => container.innerHTML = '', 5000);
+    }
+
+    // PARTITE
+    function addPartita(event) {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      fetch('{{ url_for("admin.add_partita") }}', { method: 'POST', body: formData })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            showMessage(data.message);
+            closeModal('modal-add-partita');
+            setTimeout(() => location.reload(), 1000);
+          } else {
+            showMessage(data.error || 'Errore', true);
+          }
+        })
+        .catch(() => showMessage('Errore di connessione', true));
+    }
+
+    function updatePartita(event, partitaId) {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      formData.append('partita_id', partitaId);
+      fetch('{{ url_for("admin.update_partita") }}', { method: 'POST', body: formData })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            showMessage(data.message);
+            setTimeout(() => location.reload(), 1000);
+          } else {
+            showMessage(data.error || 'Errore', true);
+          }
+        })
+        .catch(() => showMessage('Errore di connessione', true));
+    }
+
+    function deletePartita(id) {
+      if (!confirm('Eliminare questa partita?')) return;
+      fetch(`/admin/partita/${id}/delete`, { method: 'POST' })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            showMessage(data.message);
+            setTimeout(() => location.reload(), 1000);
+          } else {
+            showMessage(data.error || 'Errore', true);
+          }
+        })
+        .catch(() => showMessage('Errore di connessione', true));
+    }
+
+    // GIOCATORI
+    function addGiocatore(event) {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      fetch('{{ url_for("admin.add_giocatore") }}', { method: 'POST', body: formData })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            showMessage(data.message);
+            closeModal('modal-add-giocatore');
+            setTimeout(() => location.reload(), 1000);
+          } else {
+            showMessage(data.error || 'Errore', true);
+          }
+        })
+        .catch(() => showMessage('Errore di connessione', true));
+    }
+
+    function updateGiocatoreGoal(event, id) {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      formData.append('giocatore_id', id);
+      fetch('{{ url_for("admin.update_giocatore") }}', { method: 'POST', body: formData })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            showMessage(data.message);
+            setTimeout(() => location.reload(), 1000);
+          } else {
+            showMessage(data.error || 'Errore', true);
+          }
+        })
+        .catch(() => showMessage('Errore di connessione', true));
+    }
+
+    function editGiocatore(id, nome, squadraId, goal) {
+      document.getElementById('edit-giocatore-id').value = id;
+      document.getElementById('edit-giocatore-nome').value = nome;
+      document.getElementById('edit-giocatore-squadra').value = squadraId;
+      document.getElementById('edit-giocatore-goal').value = goal;
+      openModal('modal-edit-giocatore');
+    }
+
+    function updateGiocatoreComplete(event) {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const id = formData.get('giocatore_id');
+      fetch(`/admin/giocatore/${id}/update`, { method: 'POST', body: formData })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            showMessage(data.message);
+            closeModal('modal-edit-giocatore');
+            setTimeout(() => location.reload(), 1000);
+          } else {
+            showMessage(data.error || 'Errore', true);
+          }
+        })
+        .catch(() => showMessage('Errore di connessione', true));
+    }
+
+    function deleteGiocatore(id) {
+      if (!confirm('Eliminare questo giocatore?')) return;
+      fetch(`/admin/giocatore/${id}/delete`, { method: 'POST' })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            showMessage(data.message);
+            setTimeout(() => location.reload(), 1000);
+          } else {
+            showMessage(data.error || 'Errore', true);
+          }
+        })
+        .catch(() => showMessage('Errore di connessione', true));
+    }
+
+    // SQUADRE
+    function addSquadra(event) {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      fetch('{{ url_for("admin.add_squadra") }}', { method: 'POST', body: formData })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            showMessage(data.message);
+            closeModal('modal-add-squadra');
+            setTimeout(() => location.reload(), 1000);
+          } else {
+            showMessage(data.error || 'Errore', true);
+          }
+        })
+        .catch(() => showMessage('Errore di connessione', true));
+    }
+
+    function editSquadra(id, nome, logo, girone) {
+      document.getElementById('edit-squadra-id').value = id;
+      document.getElementById('edit-squadra-nome').value = nome;
+      document.getElementById('edit-squadra-logo').value = logo;
+      document.getElementById('edit-squadra-girone').value = girone || '';
+      openModal('modal-edit-squadra');
+    }
+
+    function updateSquadraComplete(event) {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const id = formData.get('squadra_id');
+      fetch(`/admin/squadra/${id}/update`, { method: 'POST', body: formData })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            showMessage(data.message);
+            closeModal('modal-edit-squadra');
+            setTimeout(() => location.reload(), 1000);
+          } else {
+            showMessage(data.error || 'Errore', true);
+          }
+        })
+        .catch(() => showMessage('Errore di connessione', true));
+    }
+
+    function deleteSquadra(id) {
+      if (!confirm('Eliminare questa squadra? Verranno eliminati anche tutti i suoi giocatori!')) return;
+      fetch(`/admin/squadra/${id}/delete`, { method: 'POST' })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            showMessage(data.message);
+            setTimeout(() => location.reload(), 1000);
+          } else {
+            showMessage(data.error || 'Errore', true);
+          }
+        })
+        .catch(() => showMessage('Errore di connessione', true));
+    }
+
+    // VINCITORE
+    function setVincitore(event) {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      fetch('{{ url_for("admin.set_vincitore") }}', { method: 'POST', body: formData })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            showMessage(data.message);
+            setTimeout(() => location.reload(), 1000);
+          } else {
+            showMessage(data.error || 'Errore', true);
+          }
+        })
+        .catch(() => showMessage('Errore di connessione', true));
+    }
+  </script>
+</body>
+</html>
